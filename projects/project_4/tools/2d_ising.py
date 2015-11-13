@@ -72,7 +72,7 @@ if __name__ == '__main__':
     framecounter = 0
     for T, n in zip(T_values, range(N)):
         metropolis()
-        if n % 10000 == 0:
+        if n % 50000 == 0:
             print 'ping', n
             create_image(matr, dim_x, dim_y).save('tmp_%5d.png' % framecounter)
             framecounter += 1
