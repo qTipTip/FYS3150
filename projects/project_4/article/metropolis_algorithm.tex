@@ -1,0 +1,36 @@
+\section{The Metropolis-Hastings Algorithm}
+
+In this project we need random samples from a probability distribution
+$P_\beta(\sigma)$ associated with the physical system we wish to model.
+However, direct sampling can be difficult due to the fact that we need to
+compute the partition function in order to express the probability distribution
+in its entirety.
+
+The Metropolis-Hastings algorithm is very well suited for this type of problem
+because in order to sample from a specific distribution $P_\beta(\sigma)$ all
+we need is a function $f$ proportional to the distribution density.
+
+\subsection{The Metropolis Algorithm}
+\label{sub:the_metropolis_algorithm}
+
+Under the assumption that the proposed probability distribution function is
+symmetric, we can make some simplifications to the Metropolis-Hastings
+algorithm. This is what we call the Metropolis Algorithm.  The general
+procedure can be described as follows:
+
+\begin{enumerate}
+  \item Initialization: We pick an initial sample.
+  \item For every iteration: \\
+    \begin{enumerate}
+      \item We generate a new candidate for the new sample by picking a random element in the sample. 
+      \item We calculate the acceptance ratio, which decides whether to reject
+        or accept the new candidate. (This is why the Metropolis algorithm is
+        good for this sort of problem. When computing the acceptance ratio, we
+        divide out the normalization factor $Z$, which is the computationally
+        heavy bit.)
+      \item If the acceptance ratio is greater than one, we automatically
+        accept the candidate. Otherwise, we accept the candidate with a
+        probability equal to the acceptance ratio. In the case of a rejection
+        the new sample is set to the previous one.
+    \end{enumerate} 
+\end{enumerate}

@@ -1,0 +1,306 @@
+\documentclass[intlimits]{amsart}
+\usepackage[]{xcolor} 
+\usepackage[]{graphicx} 
+\usepackage[]{hyperref}
+\usepackage[]{cleveref}
+
+\renewcommand{\v}[1]{\mathbf{#1}}
+\newcommand{\intlimits}{\int_{0}^\infty\int_0^\infty\int_0^{\pi}\int_0^\pi\int_0^{2\pi}\int_0^{2\pi}}
+\newcommand*{\github}[1]{\def\@github{\color{gray!70}#1}}
+\newcommand{\githublogo}{\raisebox{-1pt}{\includegraphics[height=9pt]{github}}}
+
+\setcounter{tocdepth}{1}
+\title{Electrons in a helium atom}
+\author{Ivar Haugal\o kken Stangeby}
+\begin{document}
+\begin{abstract}
+  In this project we wish to compute the expected value of the ground state
+  correlation energy between two electrons in a helium atom. In doing so, we also
+  take the opportunity to discuss various methods of numerical integration.
+  Namely Gaussian quadrature with both Laguerre and Legendre polynomials; brute
+  force Monte Carlo integration, and using importance sampling.\\
+  \noindent
+  All source code can be found on my GitHub page: \\
+
+  \centering{\href{https://github.com/qTipTip/FYS3150}{\githublogo \, \color{gray!50}\textit{github.com/qTipTip}}}
+\end{abstract}
+
+\maketitle
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.8\linewidth]{ch.pdf}
+\end{figure}
+
+
+\tableofcontents
+\section{Introduction}
+\label{sec:introduction}
+We define the position of electron $i$ as $\v{r}_i = x_i\v{e}_x + y_i\v{e}_y +
+z_i\v{e}_z$, and define $r_i = \sqrt{x_i^2 + y_i^2 + z_i^2}$.  The \emph{ground
+state correlation energy} of two electrons --- and more specifically its
+expectation value is given by the integral
+\begin{equation}
+  \label{eq:cart}
+  \langle \frac{1}{\left| \v{r}_1 - \v{r}_2 \right|} \rangle = \int_{-\infty}^{\infty} d\v{r}_1d\v{r}_2 e^{-2\alpha(r_1, r_2)} \frac{1}{\left| \v{r}_1 - \v{r}_2 \right|}.
+\end{equation}
+In this project we fix $\alpha=2$ which corresponds to the charge of the helium
+atom. It can be shown that this specific integral has a closed form solution of
+$5\pi^2/16^2$ which we will use to assess the numerical stability and
+effectiveness of our numerical methods.
+
+We will later, when we apply the Gauss-Laguerre quadrature, need our integral
+rewritten in spherical coordinates. The differentials are then given by
+\begin{equation}
+  \label{eq:diff}
+  d\v{r}_1d\v{r}_2 = r_1^2dr_1r_2^2dr_2\sin\theta_1d\theta_1\sin\theta_2d\theta_2d\phi_1d\phi_2,
+\end{equation}
+with a scale factor of
+\begin{equation}
+  \label{eq:scale}
+  \gamma(\beta) = \frac{1}{r_{12}} = \left( r_1^2 + r_2^2 - 2r_1r_2\cos\beta \right)^{-1/2}
+\end{equation}
+where $$\cos\beta = \cos\theta_1\cos\theta_2 +
+\sin\theta_1\sin\theta_2\cos(\phi_1 - \phi_2).$$
+
+\section{Gaussian Quadrature}
+\label{sec:gaussian_quadrature}
+
+In Gaussian Quadrature, the main idea is to rewrite an integral as a weighted
+sum of function evaluations,
+\begin{equation}
+  \notag
+  I = \int_a^b f(x) \, dx = \sum_{i=1}^{N} \omega_i f(x_i)
+\end{equation}
+however, we can do use various orthogonal polynomials which arise from
+different differential equations in the natural sciences. We will make use of
+both Legendre and Laguerre polynomials. The only downfall of these polynomials
+are that their orthogonality relation is only satisfied on certain intervals,
+hence we need to pick our polynomials carefully.
+
+\subsection{Legendre}
+\label{sub:legendre_polynomials}
+
+The Legendre polynomials are defined on the interval $[-1, 1]$ with a weight
+function $W(x) = 1$.  This would lead us to believe that we can only perform
+integrals over the interval $[-1, 1]$, but a simple change of variables lets us
+use any arbitrary interval. However, one must note that this can significantly
+degrade the numerical accuracy. The Gauss-Legendre quadrature gives rise to the following
+relation:
+\begin{equation}
+  \notag
+  I = \int_{-1}^{1} f(x) \, dx = \int_{-1}^{1}W(x)g(x)\, dx = \int_{-1}^{1}g(x)
+  \, dx = \sum^{N}_{i=1} \omega_ig(x_i).
+\end{equation}
+It turns out that the associated integration points $x_i$ are the roots of the
+Legendre polynomials. We can rewrite \cref{eq:cart} in the Legendre form using a simple change of variables.
+
+\subsection{Laguerre}
+\label{sub:laguerre_polynomials}
+
+The Laguerre polynomials are orthogonal on $[0, \infty)$ and have an associated
+weight function $W(x) = x^\alpha e^{-x}$. Again, the orthogonality property gives us the relation
+\begin{equation}
+  \notag I = \int_0^\infty f(x) \, dx = \int_0^\infty W(x)g(x) \, dx =
+  \int_0^\infty x^\alpha e^{-x} g(x) \, dx = \sum^{N}_{i=1} \omega_ig(x_i).
+\end{equation}
+
+In order to use the Gauss-Laguerre quadrature, we need to rewrite
+\cref{eq:cart} to spherical coordinates. We do this using \cref{eq:diff} and
+\cref{eq:scale}. This gives us
+\begin{align*}
+  I &= \int_{-\infty}^{\infty} d\v{r}_1d\v{r}_2 e^{-4(r_1, r_2)} \frac{1}{\left| \v{r}_1 - \v{r}_2 \right|}.\\
+    &= \intlimits r_1^2r_2^2e^{-4r_1} e^{-4r_2} \gamma(\beta)\sin\theta_1\sin\theta_2 dr_1dr_2d\theta_1d\theta_2d\phi_1d\phi_2\\
+  \intertext{Substituting $u_i = 4r_i$, $i = 1, 2$ yields}
+  &= \frac{1}{1024}\intlimits u_1^2u_2^2e^{-u_1}e^{-u_2} \frac{\sin\theta_1\sin\theta_2}{\sqrt{u_1^2 + u_2^2 - 2u_1r_2\cos\beta}} du_1du_2d\theta_1d\theta_2d\phi_1d\phi_2\\
+    &=\frac{1}{1024} \int_{0}^\infty\int_0^\infty\int_0^{\pi}\int_0^\pi\int_0^{2\pi}\int_0^{2\pi}W(u_1)W(u_2)g(u, \theta, \phi)\,du_1du_2d\theta_1d\theta_2d\phi_1d\phi_2.
+\end{align*}
+
+Based on these integral limits it can be wise to apply Gauss-Laguerre only for
+the first two integrals, and use Gauss-Legendre for the other four.
+
+\section{Monte Carlo Integration}
+\label{sec:monte_carlo_integration}
+
+In Monte Carlo integration we use a \emph{non-deterministic} approach to
+computing a definite integral. We sample integration points at random. The
+naive approach is to just pick numbers at random in the interval $[0, 1]$,
+which is what we will do in the brute force Monte Carlo method however, as we
+will see, another method is to use so-called \emph{importance-sampling} to find
+a probability distribution function (PDF) that closely resembles the function
+we wish to integrate. Since these methods are non-deterministic, there is
+always an error associated with the random aspect of the computations. We
+therefore, in addition to compute the integral itself, compute the standard
+deviation to get a grip on the uncertainty in our results. One of the effects
+of importance sampling is to reduce the standard deviation.
+
+\subsection{Brute force Monte Carlo}
+\label{sub:brute_force_monte_carlo}
+
+The probability distribution function associated with the brute force Monte Carlo method is
+the \emph{uniform distribution} given by
+\begin{equation}
+  \notag
+  p(x) = \begin{cases}
+    1, & x \in [0, 1] \\
+    0, & x \in [0, 1]^c.
+  \end{cases}
+\end{equation}
+Since $p(x)$ satisfy $\int_{-\infty}^\infty p(x) \, dx = 1$ we have that
+\begin{align*}
+  \notag
+  \langle f \rangle = \int_{-\infty}^\infty p(x) f(x) \, dx = \int_0^1 p(x)f(x) \, dx &\approx \sum^{N}_{i=1} f(x_i).
+\end{align*}
+In order to apply this for more general integration limits $a, b$ we simply
+note that by conservation of probability $p(y)dy = dx$, hence standard change
+of variables will suffice: $y(x) = a + (b - a)x$.
+
+\subsection{Importance Sampling Monte Carlo}
+\label{sub:importance_sampling_monte_carlo}
+
+We now wish to find a probability distribution function $p(y)$ that closely
+mimics the behavior of $f(x)$ over our chosen integration interval.
+For our integral, it is suitable to use the exponential distribution $p(y) = e^{-y}$, thus
+$p(r) = e^{-4r}$. However, in order to apply this, we must have the normalization criteria satisfied, hence
+\begin{equation}
+  \notag
+  p(r) = Ae^{-4r}
+\end{equation} 
+is a suitable probability distribution function. Note that we
+wish to express our integral in spherical coordinates in order to apply this
+specific probability distribution.
+
+In order to make this work for arbitrary intervals, we introduce the change of variable
+\begin{equation}
+  \notag
+  y(x) = -\frac{\ln(1 - x)}{2\alpha}
+\end{equation}
+which will give us values $y \in [0, \infty)$.
+
+\section{Implementation}
+\label{sec:implementation}
+
+In this project we employ a lot of \emph{black-box} functions, so there aren't
+that many implementation details to talk about. However, I have included some
+thoughts on selected methods.
+
+\subsection{Gauss-Legendre}
+\label{sub:gauss_legendre}
+
+In order to evaluate the integral using Gaussian Quadrature with Legendre
+polynomials, we need to find suitable integration limits. Clearly, we can't
+integrate from $-\infty$ to $\infty$ numerically. We observe that the function
+$e^{-4r_i}$ is \emph{essentially zero} for $r_i \approx 3$. This can be
+verified by the following calculations. Say we want $e^{-4r_i} = 10^{-5}$:
+\begin{equation}
+  \notag
+  e^{-4r_i} = 10^{-5} \Longrightarrow r_i = -\ln(10^{-5}) / 4
+\end{equation}
+which gives us that $r_i \approx 2.88$. We can therefore chose to neglect any
+errors that arise from incorrect integration limits by integrating from $-3$ to
+$3$ for instance.
+
+\subsection{Gauss-Laguerre}
+\label{sub:gauss_laguerre}
+
+For the integral in spherical coordinates we chose to use Laguerre polynomials
+only for the two radial integrals, and leave the integrals with respect to
+$\theta$ and $\phi$ for Legendre polynomials which is more suited for such
+narrow integration limits.
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Gauss-Legendre}
+In \cref{tab:legendre} we see that the convergence rate of the Gauss-Legendre
+method is quite poor and the numerical method can be seen as quite unstable.
+Increasing the number of integration steps does not necessarily translate
+directly into a more accurate approximation, as can be seen for the $N=25$ to
+$N=30$ jump. We have in these simulations used the integration interval $[-3,
+3]$.
+\begin{table}[p]
+  \centering
+  \caption{In this table we present the computed integral, the absolute error
+    in the calculations as well as the time spent for $N$ integration steps for the Gauss-Legendre
+    quadrature. The time complexity of the integral itself is $\mathcal{O}(N^6)$
+which is pretty immense, and can clearly be seen based on the increase in time
+elapsed for increasing $N$. }
+  \label{tab:legendre}
+  \begin{tabular}{cccc}
+    $N$ & Result & Absolute error & Time [sec]\\
+    \hline
+    \hline
+    5& 0.2642& 0.0714& 0.0004\\
+    10& 0.0719& 0.1207& 0.0267\\
+    15& 0.2390& 0.0463& 0.3184\\
+    20& 0.1561& 0.0366& 1.7411\\
+    25& 0.1958& 0.0030& 6.6549\\
+    30& 0.1772& 0.0154& 19.6983\\
+    35& 0.1899& 0.0028&55.4347\\
+    40&0.1844&0.0083&117.377\\
+    \hline
+  \end{tabular}
+\end{table}
+
+\subsection{Gauss-Laguerre}
+\label{sub:gauss_laguerre}
+As seen in \cref{tab:laguerre}, converting to spherical coordinates and
+applying Gauss-Laguerre for the two integrals with limits $0$ and $\infty$
+dramatically increases the numerical approximation. A strong convergence
+towards the exact value is observed. A slight increase in elapsed time is seen,
+however only $N = 15$ integration steps is required for a result that matches
+the best achieved using only Gauss-Legendre.
+\begin{table}[p]
+  \centering
+  \caption{Presented is the computed integral, the absolute error in calculations
+  as well as time elapsed for $N$ integration steps. The time complexity of the
+  integral itself is again $\mathcal{O}(N^6)$ however the numerical method is
+  converging properly as opposed to the Legendre quadrature.}
+  \label{tab:laguerre}
+  \begin{tabular}{cccc}
+    $N$ & Result & Absolute error & Time [sec]\\
+    \hline
+    \hline
+    5& 0.1734& 0.0193& 0.0011\\
+    10& 0.1864& 0.0063& 0.0675\\
+    15& 0.1897& 0.0030& 0.8190\\
+    20& 0.1910& 0.0016& 4.3892\\
+    25& 0.1917& 0.0010& 16.8339\\
+    30& 0.1921& 0.0006& 50.1823\\
+    35& 0.1923& 0.0004& 128.2480\\
+    40& 0.1924&0.002&291.6470\\
+    \hline
+  \end{tabular}
+\end{table}
+
+\subsection{Brute Force Monte Carlo}
+\label{sub:brute_force_monte_carlo}
+
+In \cref{tab:MC_brute} we see immediately that the Monte Carlo methods require
+a very large number of integration steps. We also see that the results converge
+quickly, and the standard deviation -- although fluctuating a fair bit -- also
+decreases with increasing $N$. The time elapsed for this brute force method
+mimics the time elapsed for the brute force Gauss-Legendre method.
+
+\begin{table}[p]
+  \centering
+  \caption{Using brute force Monte Carlo integration we see that the results
+  converge to the exact fairly quickly. The computed standard deviation however
+fluctuates a fair bit. None the less, the brute force Monte Carlo method is
+have similar performance to the brute force Gauss-Legendre integral.}
+  \label{tab:MC_brute}
+  \begin{tabular}{ccccc}
+    N & Result & Absolute error & Standard Deviation & Time [sec]\\
+    \hline\hline
+    $10^3$ &0.0235 &0.1691 &0.0089 &0.00007\\
+    $10^4$ &0.0473 &0.1453 &0.0200 &0.00073\\
+    $10^5$ &0.1732 &0.0195 &0.0497 &0.00632\\
+    $10^6$ &0.1759 &0.0168 &0.0159 &0.06715\\
+    $10^7$ &0.1829 &0.0097 &0.0080 &0.64801\\
+    $10^8$ &0.1981 &0.0053 &0.0030 &6.46146\\
+    $10^9$ &0.1938 &0.0010 &0.0010 &64.5177\\
+    \hline
+  \end{tabular}
+\end{table}
+
+\end{document}

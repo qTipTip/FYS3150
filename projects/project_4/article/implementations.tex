@@ -1,0 +1,52 @@
+\section{Implementation}
+\label{sec:implementation}
+
+In this section we take a closer look at some of the implementation specific
+details in this project. The Ising model was implemented in \textsc{C++} and
+the class \texttt{Ising.cpp} contains all the methods needed for simulating the
+model.
+
+\subsection{The Ising class}
+\label{sub:the_ising_class}
+I chose an object-oriented approach to this implementation because I wanted the
+possibility of having class instances that represented a physical system at any
+given time. By wrapping all the methods in a class I could easily rerun a
+similar simulation for a different temperature by re-initializing the system
+and keeping any values from the previous temperature.\footnote{If I managed to
+pull any of this through by any stretch of the imagination can be discussed.} I
+also had a boolean flag for checking whether the system had been previously
+thermalized for a previous temperature - in that case, one could skip the
+thermalization.
+
+I did not manage to figure out a way of outputting data that would satisfy the
+demands of all the text-problems in the project at once, so I did have to do
+some monkey-patching for some of them.
+
+The computationally heavy methods are the \texttt{simulate} and
+\texttt{metropolis}-methods, where \texttt{simulate} calls \texttt{metropolis}
+once for each Monte-Carlo cycle. If we let $L$ denote the grid dimension and
+$M$ the number of Monte-Carlo cycles, then each call of the \texttt{metropolis}
+method constitutes a complexity of $\mathcal{O}(L^2)$. The \texttt{simulate}
+method calls \texttt{metropolis} $M$ times, hence the total complexity for one
+simulation for one temperature is $\mathcal{O}(ML^2)$.
+
+\subsection{Main method}
+\label{sub:main_method}
+The main method is fairly simple, given a temperature range $[T_1, T_2]$ it
+assigns a subinterval based on the number of nodes running in parallel to each
+node. Each node then proceeds to simulate the system for its assigned
+temperature range, and outputs its data the same data-file. The sorting of the
+data is done by \texttt{Python}. The parallelization is done using OpenMPI.
+
+\subsection{Errors}
+\label{sub:errors}
+
+My program gives correct values for certain systems, and very wonky values for
+other systems. I have not been able to determine whether this is an artifact of
+running too few simulations, whether my temperature resolution should have been
+higher, or whether it is an artifact introduced by the stochastic nature of the
+algorithms or (most probable) there is a bug somewhere in my program.
+
+Based on the plots produced, all the weird behavior occurs in the quantities
+directly dependent on the magnetization, which might indicate that that is
+where the problem lies.

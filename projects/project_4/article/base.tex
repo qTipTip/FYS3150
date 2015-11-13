@@ -1,0 +1,70 @@
+\documentclass{article}
+
+\usepackage[flushmargin, ragged, side]{footmisc} 
+
+\usepackage[]{amsmath} 
+\usepackage[]{xcolor} 
+\usepackage[]{amsthm} 
+\usepackage[]{amssymb} 
+\usepackage[]{enumerate} 
+\usepackage[]{graphicx} 
+\usepackage[]{subcaption} 
+\usepackage[]{hyperref} 
+\usepackage[]{cleveref} 
+
+\newcommand{\ua}{\uparrow}
+\newcommand{\da}{\downarrow}
+\newcommand*{\github}[1]{\def\@github{\color{gray!70}#1}}
+\newcommand{\githublogo}{\raisebox{-1pt}{\includegraphics[height=9pt]{github}}}
+
+\title{%
+  \textsc{The Ising model in two dimensions}\\
+  \small{FYS3150}
+  }
+\author{Ivar Haugal\o kken Stangeby}
+\begin{document}
+  \maketitle
+  \begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\linewidth]{new_york_skyline.pdf}
+    \caption*{A Metropolis skyline as a function of temperature for 100000 MC-cycles.}
+
+    \label{fig:new_york_skyline}
+  \end{figure}
+  \clearpage
+  
+  \begin{abstract}
+    In this project we look at the Ising model in two dimensions. There are a
+    set of physical quantities related to magnetic systems that are interesting
+    to examine. We implement the Metropolis algorithm and compute various
+    expectation-values for these quantities. For a $2\times2$ Ising model we
+    derive the analytical expressions for these values and compare them with
+    the numerically computed ones. We also examine what happen when we reach
+    the thermodynamical limit, as the lattice size of the model increases.
+    \noindent
+    All source code can be found on my GitHub page: \\
+
+    \centering{\href{https://github.com/qTipTip/FYS3150}{\githublogo \, \color{gray!50}\textit{github.com/qTipTip}}}
+  \end{abstract}
+  \tableofcontents
+  % Explain the physical system we want to model
+  % Introduce the Ising Model
+  \input{ising_model.tex} 
+  % - 1D model
+  % - 2D model
+  %     - Square lattice Ising Model
+  %       - interacting vs noninteracting
+  %       - with our without external magnetic field
+  %       - we wish to lower energy, explain parallel vs anti-parallel spin
+  % Introduce the Metropolis Algorithm and why we want to use it
+  \input{metropolis_algorithm.tex}
+  % implementation
+  \input{implementations.tex}
+  % simulations
+  \input{simulations.tex}
+  % Calculations of 2x2 analytical quantities
+  \clearpage
+  \input{conclusion.tex}
+  \appendix
+  \input{appendix_A_2x2Ising.tex}
+\end{document}

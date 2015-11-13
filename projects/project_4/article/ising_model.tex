@@ -1,0 +1,161 @@
+\section{The Ising model}
+
+We first start by discussing the Ising Model in its most general form. We later
+specialize the model to our specific needs.
+
+\subsection{The general Ising model}
+The \emph{Ising Model} is a model in statistical physics that describe phase
+transitions in ferromagnetism\footnote{Ferromagnetism is the basic mechanism by
+which certain materials form permanent magnets, or are attracted to magnets.
+Ferromagnetism is the strongest type of magnetism.}. In this model we represent
+magnetic dipole moments of atomic spins that can be in one of two states,
+$\uparrow$ or $\downarrow$. The spins are arranged in a \emph{lattice}, which
+enables us to relate one spin to its neighbors.
+
+We first introduce some notation. Let $\Lambda$ be a set of lattice positions,
+where each element in $\Lambda$ is assigned a set of neighboring sites. The
+lattice then forms a graph. We assign for each $k \in \Lambda$ a variable
+$\sigma_k$ which takes the value 1 or -1, representing the site's spin,
+$\uparrow$ or $\downarrow$, respectively. We can now create a \emph{spin
+configuration} $\sigma$ which is a specific configuration of this lattice.  For
+two sites $i, j \in \Lambda$ one can talk about the \emph{interaction}
+$J_{ij}$. Generally, for each $i \in \Lambda$ one also has an \textit{external
+magnetic field} $h_i$ interacting with $i$.
+
+We can talk of the \emph{energy} of a specific configuration, which is given by
+the Hamiltonian
+\begin{equation}
+  \label{eq:general ising model}
+  E = H(\sigma) = - \sum^{}_{\langle i k\rangle} J_{ij}\sigma_i\sigma_j - \mu \sum^{}_{j} h_j\sigma_j
+\end{equation}
+where the notation $\langle i j \rangle$ just means that we sum over adjacent
+spins only.
+
+In order to calculate relevant physical quantities for such a system, we need
+an appropriate probability that describe the probability of finding the system
+in a certain configuration. The \emph{configuration probability} is given by
+the Boltzmann distribution
+\begin{equation}
+  \label{eq:configuration probability}
+  P_\beta(\sigma) = \frac{e^{-\beta H(\sigma)}}{Z_\beta}
+\end{equation}
+where $Z_\beta$ is a normalization constant. We call $Z_\beta$ the
+\emph{partition function} for the \emph{canonical ensemble}. It is interesting
+to note that when increasing the temperature $T$, the probability
+$P_\beta(\sigma)$ of finding the system in a specific configuration $\sigma$
+\emph{decreases}. This is essentially due to the fact that when we increase the
+temperature the probability of finding states in an unfavorable configuration
+become probabilistically feasible in comparison with the most common
+configurations.
+
+When modeling a magnetic physical system there are certain physical quantities
+that we are interested in. Firstly, the \emph{mean energy} given by
+\begin{equation}
+  \label{eq:mean energy}
+  \langle E \rangle = \sum^{M}_{i=1} E_i P_\beta(\sigma) = \frac{1}{Z} \sum^{M}_{i=1} E_i e^{-\beta E_i}.
+\end{equation}
+The \emph{mean magnetization} is given by
+\begin{equation}
+  \label{eq:mean magnetization}
+  \langle \mathcal{M} \rangle = \sum^{M}_{i=1} \mathcal{M}_i P_\beta(\sigma) =\frac{1}{Z} \sum^{M}_{i=1} \mathcal{M}_i e^{\beta E_i},
+\end{equation}
+where $\mathcal{M}_i = \sum^{}_{j \in \Lambda}\sigma_j$ for all configurations
+$\sigma$ and $M$ denotes the number of possible configurations.  We are also
+interested in the \emph{magnetic susceptibility} $\chi$ which tells us how much
+an extensive parameter changes when an intensive parameter increases. It is
+given by
+\begin{equation}
+  \label{eq:magnetic susceptibility}
+  \chi = \frac{1}{k_BT}\left( \langle \mathcal{M}^2 \rangle - \langle \mathcal{M} \rangle^2 \right).
+\end{equation}
+The \emph{specific heat} $C_V$, which tells us how much the energy changes by
+increasing the temperature, is given by
+\begin{equation}
+  \label{eq:specific heat}
+  C_V = \frac{1}{k_BT^2} \left( \langle E^2 \rangle - \langle E \rangle ^2 \right).
+\end{equation}
+
+If we can make some assumptions about the interaction $J_{ij}$ we can classify
+the Ising model.  If for all $i, j \in \Lambda$ we have
+\begin{enumerate}[i)]
+  \item $J_{ij} > 0$, we call the interaction \emph{ferromagnetic};
+  \item $J_{ij} < 0$, we call the interaction \emph{antiferromagnetic};
+  \item $J_{ij} = 0$, the spins are non-interacting.
+\end{enumerate}
+
+\subsection{Ising model specialized to our project}
+
+We can make some simplifications to the general Ising model in order to tailor
+it to our specific needs. First of all, we wish to examine the system with no
+external magnetic field\footnote{This specific system was solved analytically
+by Lars Onsager in 1944.}. We can therefore, due to $h_j = 0$ for all $j \in
+\Lambda$, rewrite
+\cref{eq:general ising model} as
+\begin{equation}
+  \label{eq:no magnetic ising}
+  E = H(\sigma) = - \sum^{}_{\langle i k \rangle} J_{ij}\sigma_i\sigma_j.
+\end{equation}
+We also assume that the coupling constant $J_{ij}$ that describe the
+interaction between neighboring spins as constant $J$ for all $i, j \in
+\Lambda$. \Cref{eq:no magnetic ising} can then be read as
+\begin{equation}
+  \label{eq:constant interaction ising}
+  E = H(\sigma) = - J\sum^{}_{\langle i k \rangle} \sigma_i\sigma_j
+\end{equation}
+
+In this project we wish to examine a ferromagnetic system, $J > 0$. This in
+turn, means that it is favorable for neighboring spins to be parallel, as this
+leads to a lower energy. This can be seen from the fact that $\sigma_i \sigma_j
+= 1$ whenever spin $i$ and $j$ have the same sign.
+
+\subsection{A $2\times2$ Ising model}
+\label{sub:a_2times2_ising_model}
+
+In order to get a feel for what these systems look like we examine a two
+dimensional Ising model with lattice dimensions $L = 2$ and periodic boundary
+conditions. Our model has $M = 2^4$ different configurations $\sigma$. The
+energy for any arbitrary configuration is given by
+\begin{align*}
+  \label{eq:abitrary energy}
+  E_i = -J \sum^{4}\nolimits_{\langle kl \rangle} \sigma_k\sigma_l.
+\end{align*}
+
+Based on this expression we see that whenever all spins are parallel we have a
+configuration energy of $E_i = -8J$. In the cases where one single spin is
+anti-parallel to the other three we have a configuration energy of $E_i = 0$.
+If we have two parallel and two anti-parallel, the configuration energy is $E_i
+= 0$ or $E_i = 8J$. Each energy state $E_i$ has a \emph{degeneracy}
+$\Omega(E_i)$ which corresponds to the number of configurations with the same
+energy state. The ground state for this system has degeneracy 2, so we can
+either start with all spin up or all spin down and still be in the lowest
+energy state possible. For a small $2\times2$ system such as this one, it is
+not unlikely that we can transition from a configuration with all spin up to a
+configuration with all spin down (although keeping the same energy level),
+however this is unlikely for large lattices.
+
+We are now interested in examining the physical quantities of interest
+introduced above.  For the $2\times2$ Ising model these quantities have closed
+form expressions. The work needed to show these relations are given in Appendix
+A. The partition function for this particular system is given by
+\begin{equation}
+  \notag
+  Z = \sum^{16}_{i=1} e^{-\beta E_i} = 4 \cosh (8\beta J) + 12.
+\end{equation}
+We can now compute the mean energy of the system. This gives
+\begin{equation}
+  \notag
+  \langle E \rangle = 8J \frac{\sinh(8\beta J)}{\cosh (8\beta J)+3}
+\end{equation}
+Differentiating once more gives us an expression for the specific heat $C_V$
+\begin{equation}
+  \notag
+  C_V = -\frac{64J^2 }{k_BT^2(\cosh(8\beta J) + 3)} \left( \cosh(8\beta J) - \frac{\sinh^2(8\beta J)}{\cosh(8\beta J)+3} \right)
+\end{equation}
+Similarly, we have a closed form expression for the susceptibility:
+\begin{equation}
+  \notag
+  \chi = \frac{8 \left( e^{8\beta J} + 1 \right)}{\cosh(8\beta J) + 3} \frac{1}{k_BT}.
+\end{equation}
+We will later refer back to these specific values for the $2\times2$ Ising
+model when we compare the analytical results to the numerically computed
+values.

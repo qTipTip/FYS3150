@@ -1,0 +1,55 @@
+\section{Analytical derivations}
+\label{sec:analytical_derivations}
+
+In this section we derive the closed form analytical expressions for the
+physical quantities for a $2\times2$ Ising model. The mean energy and specific
+heat of a thermodynamical system can be expressed in terms of the partition
+function.
+\begin{align*}
+  \langle E \rangle = - \frac{\partial}{\partial \beta} \ln Z; &&  \langle C_V \rangle = \frac{1}{kT^2}\frac{\partial^2}{\partial\beta^2}\ln Z.
+\end{align*}
+We recall that the partition function for a $2\times2$ model is given by ${Z = 4\cosh(8\beta J) + 12}$. The mean energy then becomes
+\begin{align*}
+  \langle E \rangle = -\frac{\partial}{\partial\beta} \ln \left( 4\cosh(8\beta J) + 12 \right) = -8J\frac{\sinh(8\beta J)}{\cosh(8\beta J+3)}, 
+\end{align*} 
+and the mean specific heat becomes
+\begin{align*}
+  \langle C_V \rangle  &= -\frac{1}{kT^2}\frac{\partial}{\partial\beta}\left(-8J\frac{\sinh(8\beta J)}{\cosh(8\beta J+3)}\right)\\
+                       &= \frac{1}{kT^2}\frac{64J^2}{\cosh(8\beta J)+3} \left( \cosh(8\beta J) - \frac{\sinh^2(8\beta J)}{\cosh(8\beta J)+3} \right).
+\end{align*}
+
+The magnetization of a configuration is given by the sum of all spins. In order
+to examine the mean magnetization of a system of a given lattice size, we
+simply sum over all possible magnetizations multiplied by the probability of
+the system being in each such configuration. Mathematically, this translates into
+\begin{equation}
+  \notag
+  \langle \mathcal{M} \rangle = \frac{1}{Z} \sum^{M}_{i=1} M_i e^{-\beta E_i}.
+\end{equation}
+For a simple $2\times2$ lattice this simply reduces to counting all the
+possibilities and this gives us that the mean magnetization is
+\begin{equation}
+  \notag
+  \langle \mathcal{M} \rangle = \frac{1}{Z} \left( -4e^{8\beta J} - 8e^0 + 8e^0 + 4e^{8\beta J} \right) = 0.
+\end{equation}
+If we were to consider the mean of the absolute magnetization $|\mathcal{M}|$, then this simply becomes
+\begin{equation}
+  \notag
+  \langle |\mathcal{M}| \rangle = \frac{1}{Z} \left( 4e^{8\beta J} + 8e^0 + 8e^0 + 4e^{8\beta J} \right) = \frac{4 + 2e^{8\beta J}}{\cosh(8\beta J)+3}.
+\end{equation}
+
+The susceptibility $\chi$ of a thermodynamical system can be calculated if we
+know the variance $\sigma_\mathcal{M}^2$ of the magnetization and is given by 
+\begin{equation}
+  \notag
+  \chi = \frac{1}{kT}\sigma_\mathcal{M}^2.
+\end{equation}
+We first start by computing the variance of the magnetization:
+\begin{align*}
+  \sigma_\mathcal{M}^2 = \langle \mathcal{M}^2 \rangle - \langle \mathcal{M} \rangle^2 = \frac{32}{Z}\left( e^{8\beta J} + 1 \right) - 0 = \frac{8 \left( e^{8\beta J} + 1 \right)}{\cosh(8\beta J) + 3}.
+\end{align*}
+The susceptibility then reads
+\begin{equation}
+  \notag
+  \chi = \frac{8 \left( e^{8\beta J} + 1 \right)}{kT(\cosh(8\beta J) + 3)}.
+\end{equation}
