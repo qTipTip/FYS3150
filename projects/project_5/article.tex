@@ -1,8 +1,11 @@
 \documentclass[a4paper, 11pt]{article}
 
 \usepackage[]{amsmath, amsthm, amssymb} 
+\usepackage[]{algorithmic} 
 
 \title{$N$-body simulation of an open galactic cluster}
+\author{Ivar Haugal{\o}kken Stangeby}
+
 \begin{document}
 \maketitle
 \begin{abstract}
@@ -12,8 +15,16 @@
     method.
 \end{abstract}
 
+\tableofcontents
+
 \section{$N$-body problem}
 \label{sec:_n_body_problem}
+
+In this section we look at the general form of the $N$-body problem, as well as
+examine the special case of $N = 2$, the two-body problem.
+
+\subsection{General form}
+\label{sub:general_form}
 
 The $N$-body problem considers $N$ point masses denoted $m_i$ with $i = 1, 2,
 \ldots N$ in an inertial reference frame in three dimensional space
@@ -24,7 +35,7 @@ Newton's law of gravity that the gravitational force felt on $m_i$ by a single
 mass $m_j$ ($j \neq i$) is given by
 \begin{equation}
     \notag
-    \mathbf{F}_{ij} = \frac{Gm_im_j \left( \mathbf{q}_j - \mathbf{q}_i \right)}{\|g_j - q_i\|_{}^3}
+    \mathbf{F}_{ij} = \frac{Gm_im_j \left( \mathbf{q}_j - \mathbf{q}_i \right)}{\|\mathbf{q}_j - \mathbf{q}_i\|_{}^3}
 \end{equation}
 with $G$ being the gravitational constant and $\|\mathbf{q}_j -
 \mathbf{q}_i\|_{}$ is the magnitude of the distance between $\mathbf{q}_i$ and
@@ -50,4 +61,53 @@ where $H = T + U$ and $T$ is the kinetic energy given by
     \notag
     T = \sum^{N}_{i=1} \frac{\|\mathbf{p}_i\|_{}^2}{2m_i}.
 \end{equation}
+
+\subsection{Two-body problem}
+\label{sub:two_body_problem}
+
+If we consider the motion of two bodies, for instance the Earth-Sun system, then:
+\begin{align*}
+    \mathbf{F}_{12} = \frac{Gm_1m_2 \left( \mathbf{q}_2 - \mathbf{q}_1 \right)}{\|\mathbf{q}_j - \mathbf{q}_i\|_{}^3} && \text{Earth Sun} \\
+    \mathbf{F}_{21} = \frac{Gm_2m_1 \left( \mathbf{q}_1 - \mathbf{q}_2 \right)}{\|\mathbf{q}_1 - \mathbf{q}_2\|_{}^3} && \text{Sun Earth}
+\end{align*}
+
+\section{Numerical Methods}
+\label{sec:numerical_methods}
+
+We examine the numerical methods used in this project, and look at various
+properties related to the performance of these methods in $N$-body simulations.
+We benchmark using a two-body problem.
+
+\subsection{4-th order Runge-Kutta}
+\label{sub:4_th_order_runge_kutta}
+
+In the fourth-order Runge-Kutta method, also known as \emph{the classical
+Runge-Kutta method} we determine the next values the approximations using the
+value before as well as a weighted average of four increments where each
+increment is a multiple of the interval and an estimated slope, given by an
+explicit formula for the first derivative.
+
+\subsubsection{Algorithm}
+\label{ssub:algorithm}
+
+Specify an initial value problem as
+\begin{equation}
+    \notag
+    \dot{y} = f(t, y), \quad y(t_0) = y_0
+\end{equation}
+where $f$, $t_0$ and $y_0$ is given. Then the fourth order Runge-Kutta method
+can be described as follows:
+\begin{algorithmic}
+    \FOR{$n = 0$ to $N-1$}
+    \STATE $y_{n+1} = y_n + \frac{h}{6}\left( k_1 + 2k_2 + 2k_3 + k_4 \right)$
+    \STATE $t_{n+1} = t_n + h$
+    \ENDFOR
+\end{algorithmic}
+where 
+\begin{flalign*}
+    k_1 &= f(t_n, y_n), & k_2 &= f(t_n + h/2, y_n + k_1 h/2), \\
+    k_3 &= f(t_n + h/2, y_n + k_2h/2), &  k_4 &= f(t_n + h, y_n + hk_3).
+\end{flalign*}
+\subsection{Velocity-Verlet}
+\label{sub:velocity_verlet}
 \end{document}
