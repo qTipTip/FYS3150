@@ -1,5 +1,7 @@
 \documentclass[a4paper, 11pt]{article}
 
+\usepackage[]{amsmath, amsthm, amssymb} 
+
 \title{$N$-body simulation of an open galactic cluster}
 \begin{document}
 \maketitle
@@ -17,10 +19,35 @@ The $N$-body problem considers $N$ point masses denoted $m_i$ with $i = 1, 2,
 \ldots N$ in an inertial reference frame in three dimensional space
 $\mathbb{R}^3$. To each point mass $m_i$ we can associate a position vector
 $\mathbf{q}_i$.  According to newtons second law we have that the sum of the
-forces on the mass is equal to the mass times the acceperation. We have from Newton's law of gravity that the gravitational force fel on $m_i$ by a single mass $m_j$ ($j \neq i$) is given by
+forces on the mass is equal to the mass times the acceperation. We have from
+Newton's law of gravity that the gravitational force felt on $m_i$ by a single
+mass $m_j$ ($j \neq i$) is given by
 \begin{equation}
     \notag
-    \mathbf{F}_{ij} = \frac{Gm_im_j \left( \mathbf{q}_j - \mathbf{q}_i \right)}{\|g_j 0 q_i\|_{}^2}
+    \mathbf{F}_{ij} = \frac{Gm_im_j \left( \mathbf{q}_j - \mathbf{q}_i \right)}{\|g_j - q_i\|_{}^3}
 \end{equation}
-
+with $G$ being the gravitational constant and $\|\mathbf{q}_j -
+\mathbf{q}_i\|_{}$ is the magnitude of the distance between $\mathbf{q}_i$ and
+$\mathbf{q}_j$.
+We can now sum over all masses, which gives us the $N$-body \emph{equations of
+motion}:
+\begin{equation}
+    \notag
+    m_i \frac{d^2\mathbf{q}_i}{dt^2} = \sum^{N}_{j=1, j\neq i} \frac{Gm_im_j \left( \mathbf{q}_j \right) - \mathbf{q}_i)}{\|\mathbf{q}_j - \mathbf{q}_i\|_{}^3} = \frac{\partial U}{\partial \mathbf{q}_i}
+\end{equation}
+where $U$ is the \emph{self-potential} energy
+\begin{equation}
+    \notag
+    U = \sum^{}_{1 \leq i < j \leq N} \frac{Gm_im_j}{\|\mathbf{q}_j-\mathbf{q}_i \|_{}}.
+\end{equation}
+We can now define the momentum associated to each mass $m_i$ to be $\mathbf{p}_i = m_id\mathbf{q}_i/d_t$, which gives us that \emph{Hamilton's equations of motion} for the $N$-body problem become
+\begin{align*}
+    \notag
+    \frac{d\mathbf{q}_i}{dt} = \frac{\partial H}{\partial \mathbf{p}_i} && \frac{d\mathbf{p}_i}{dt} = -\frac{\partial H}{\partial \mathbf{q}_i},
+\end{align*}
+where $H = T + U$ and $T$ is the kinetic energy given by
+\begin{equation}
+    \notag
+    T = \sum^{N}_{i=1} \frac{\|\mathbf{p}_i\|_{}^2}{2m_i}.
+\end{equation}
 \end{document}
