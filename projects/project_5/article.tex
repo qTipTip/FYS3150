@@ -1,0 +1,26 @@
+\documentclass[a4paper, 11pt]{article}
+
+\title{$N$-body simulation of an open galactic cluster}
+\begin{document}
+\maketitle
+\begin{abstract}
+    In this project we look at the Newtonian $N$-body problem using various
+    numerical methods for solving ordinary differential equations. Specifically
+    of interest is the fourt order Runge-Kutta method and the Velocity-Verlet
+    method.
+\end{abstract}
+
+\section{$N$-body problem}
+\label{sec:_n_body_problem}
+
+The $N$-body problem considers $N$ point masses denoted $m_i$ with $i = 1, 2,
+\ldots N$ in an inertial reference frame in three dimensional space
+$\mathbb{R}^3$. To each point mass $m_i$ we can associate a position vector
+$\mathbf{q}_i$.  According to newtons second law we have that the sum of the
+forces on the mass is equal to the mass times the acceperation. We have from Newton's law of gravity that the gravitational force fel on $m_i$ by a single mass $m_j$ ($j \neq i$) is given by
+\begin{equation}
+    \notag
+    \mathbf{F}_{ij} = \frac{Gm_im_j \left( \mathbf{q}_j - \mathbf{q}_i \right)}{\|g_j 0 q_i\|_{}^2}
+\end{equation}
+
+\end{document}
