@@ -13,7 +13,7 @@ class CelestialBody:
         self.r = np.zeros([n+1, 3])
         self.v = np.zeros([n+1, 3])
         self.a = np.zeros([n+1, 3])
-        self.M = np.zeros([n+1, 3])
+        self.M = M
         self.R = radius
 
     def set_initial_conditions(self, r0, v0, a0):
@@ -33,16 +33,16 @@ class CelestialBody:
     def __call__ (self, celestial_body_list, i):
         """
         Returns the total forces exerted by all the other celestial bodies on
-        this body.
+        this body at a timestep i.
         """
         total_force = [0, 0, 0]
         for body in celestial_body_list:
             if body == self:
                 print 'Not calculating self'
                 continue
-            total_force += Cluster.G * self.M * body.M * (self - (body, i))/float(np.linalg.norm(self - (body, i)))** 3
+            else: 
+                total_force += CelestialBody.G * self.M * body.M * (self - (body, i))/float(np.linalg.norm(self - (body, i)))**3
 
-        print type(total_force)
         return total_force
 
     def __sub__(self, (other, i)):
@@ -55,7 +55,7 @@ class CelestialBody:
         """
         Pushes the celestial body one time increment - Using EulerCromer for now
         """
-        self.a[i] = self(cb_list, i) / self.M
-        self.v[i+1] = self.v[i] + self.a[i] * dt
-        self.r[i+1] = self.r[i] + self.v[i] * dt
+        self.a[i,:] = self(cb_list, i) / self.M
+        self.v[i+1,:] = self.v[i,:] + self.a[i,:] * dt
+        self.r[i+1,:] = self.r[i,:] + self.v[i,:] * dt
 
