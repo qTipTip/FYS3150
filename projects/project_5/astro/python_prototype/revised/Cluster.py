@@ -4,6 +4,7 @@ import numpy as np
 import os
 import shutil, glob
 import random
+from scipy.misc import imread
 
 from CelestialBody import CelestialBody
 class Cluster:
@@ -15,7 +16,7 @@ class Cluster:
     def __init__(self, N=2, n_steps=1000):
         self.N = N
         self.n_steps = n_steps
-        self.cb_list = [CelestialBody(radius=random.randint(30, 70), mass=float(random.randint(9, 11)), n=n_steps) for i in range(N)]
+        self.cb_list = [CelestialBody(radius=random.randint(30,70), mass=float(random.randint(9, 11)), n=n_steps) for i in range(N)]
          
     def visualize(self, i):
         """
@@ -24,11 +25,13 @@ class Cluster:
         """
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
-        ax.set_xlim3d([-20, 20])
-        ax.set_ylim3d([-20, 20])
-        ax.set_zlim3d([-20, 20])
+        ax.set_xlim3d([-50, 50])
+        ax.set_ylim3d([-50, 50])
+        ax.set_zlim3d([-50, 50])
+        ax.view_init(elev=11, azim=360*float(i)/self.n_steps)
         for body in self.cb_list:
-            ax.scatter(body.r[i,0], body.r[i,1], body.r[i,2], s=body.radius)
+            ax.scatter(body.r[i,0], body.r[i,1], body.r[i,2], s=body.radius, c=body.radius**4/70**4, cmap='autumn')
+        plt.axis('off')
         plt.savefig('tmp_%04d.png' % i)
         plt.close()
     
@@ -41,11 +44,14 @@ class Cluster:
             shutil.rmtree(subdir)
         os.mkdir(subdir) # create directory
         os.chdir(subdir) # enter new directory 
-
+        
+        dt = 0.5
         for i in range(self.n_steps):
+            if i % 10 == 0:
+                print i, '/', self.n_steps
             self.visualize(i)
             for body in self.cb_list:
-                body.step(0.1, i, self.cb_list)
+                body.step(dt, i, self.cb_list)
 
         cmd = 'convert -delay 4 tmp_*.png movie.gif'
         os.system(cmd)

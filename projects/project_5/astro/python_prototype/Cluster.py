@@ -13,9 +13,9 @@ class Cluster:
     def __init__(self, N=2, n_steps=6):
         self.N = N
         self.n_steps = n_steps
-        self.cb_list = [CelestialBody(radius=random.randint(30, 500), M=1.0e5, n=n_steps) for i in range(N)]
+        self.cb_list = [CelestialBody(radius=random.randint(30, 500), M=float(random.randint(9, 11)), n=n_steps) for i in range(N)]
          
-    def visualize(self, i=0):
+    def visualize(self, i):
         """
         Shows a snapshot of the current state of the system at time t_i.
         Particles are scaled by size.
@@ -26,7 +26,6 @@ class Cluster:
         for body in self.cb_list:
             ax.scatter(body.r[i,0], body.r[i,1], body.r[i,2], s=body.R)
         plt.show()
-        plt.clf()
     
     def animate(self):
         """
@@ -34,6 +33,7 @@ class Cluster:
         """
         for i in range(self.n_steps):
             self.visualize(i)
+            print self.cb_list[0].v[i,:]
             for body in self.cb_list:
                 body.step(1, i, self.cb_list)
 
@@ -47,9 +47,12 @@ class Cluster:
         Picks a uniformly random point in a sphere of radius R. Pretends to be
         picking in a cube, then discards anything outside the sphere radius.
         """
+        astronomical_unit = 1.4960e11
         while True:
+
             x = random.random()*R
             y = random.random()*R
             z = random.random()*R
+
             if np.sqrt(x**2 + y**2 + z**2) < R:
                 return np.array([x, y, z])
