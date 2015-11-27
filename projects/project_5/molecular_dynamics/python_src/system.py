@@ -25,8 +25,8 @@ kinetic_energy = np.array(kinetic_energy)
 potential_energy = np.array(potential_energy)
 temperature = np.array(temperature)
 density = np.array(density)
-initial_temp = 300
-plt.plot(initial_temp/temperature, label='temperature')
+initial_temp = 80
+plt.plot(temperature, label='temperature')
 plt.legend()
 plt.show()
 plt.plot(kinetic_energy, label='kinetic')

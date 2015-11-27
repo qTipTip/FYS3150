@@ -4,6 +4,7 @@
 \usepackage[]{subcaption} 
 \usepackage[]{amsthm, amsmath, amssymb} 
 \usepackage[]{hyperref} 
+\urlstyle{sf}
 \graphicspath{{../pictures/}}
 
 \renewcommand{\vec}[1]{\mathbf{#1}}
@@ -230,6 +231,11 @@
     size of the system. For a total of $n$ atoms in the system, we have a time
     complexity of $\mathcal{O}(n^2)$. Luckily more efficient methods are
     available, most notably is the Verlet list method. 
+    
+    We need to chose the parameters $\sigma$ and $\varepsilon$ so that they are
+    suited for simulation of argon. It turns out that $\sigma = 3.405
+    \mathrm{\AA}$ and $\varepsilon = 119.8k_B\mathrm{K}$ with $k_B = 1$ in
+    MD-units.
 
     Argon has a melting point of $\approx 84$K and a boiling point of $\approx
     87$K. If we run the simulations, once for a temperature of $40$K, once for
@@ -257,10 +263,9 @@
             temperatures of $40$, $85$ and $120$ kelvin. It is a bit difficult
             to conclude from the pictures, one really needs to see the system
             in motion, but the system do behave more or less like a solid, a
-            liquid and a gas for respective temperatures. Any artifacts can be
-            contributed to numerical instability. It is possible to see a
+            liquid and a gas for respective temperatures. It is possible to see a
             certain change in the entropy of the system across the three
-            images. These made use of the Euler-Cromer integration method.}
+            images. These made use of the Velocity-Verlet integration method.}
         \label{fig:potential_iteration}
     \end{figure}
 
@@ -319,9 +324,28 @@
         T = \frac{2}{3} \frac{E_k}{nk_b}.
     \end{equation}
     Notice the removal of the brackets --- we are only interested in the
-    \emph{instantaneous} temperature at any point in time. We also note that
+    \emph{instantaneous} temperature at any point in time. We also recall that
     since our units are scaled, Boltzmann's constant is equal to one.
-    The density of the system is the total mass of the system divided by the volume.
+
+\section{Simulations}
+\label{sec:simulations}
+
+In this section we consider various systems and simulate them using the program
+devised in the previous section.
+
+\subsection{Energy conservation of integration method}
+\label{sub:energy_conservation_of_integration_method}
+
+We initially decided to use the Velocity-Verlet integration method as opposed
+to Euler-Cromer for its good energy conservation. We now simulate a set of
+similar systems with varying temperature and look at how the fluctuations in
+total energy scales with the timestep $\Delta T$. In order to do this we can
+consider the standard-devation of the total energy.
+
+
+\subsection{Melting temperature of system}
+\label{sub:melting_temperature_of_system}
+
 
 \listoffigures      
 
@@ -332,9 +356,6 @@
 \bibitem{equipar}
     \url{https://en.wikipedia.org/wiki/Equipartition\_theorem}
 \end{thebibliography}
-
-\section{Simulations}
-\label{sec:simulations}
 
 
 
