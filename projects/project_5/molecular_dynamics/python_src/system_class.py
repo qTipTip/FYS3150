@@ -1,4 +1,5 @@
 import os
+import matplotlib.pyplot as plt
 class System:
 
     """ This class represents the setup of a system with the following paramenters:
@@ -29,18 +30,18 @@ class System:
         os.system('mv samples.dat %s' % (self.file_name))
 
     def read_data(self):
-        temperature = []
-        potential = []
-        kinetic = []
-        total = []
+        self.temperature = []
+        self.potential = []
+        self.kinetic = []
+        self.total = []
         
         with open(self.file_name, 'r') as data_file:
             for line in data_file:
                 line = [float(value) for value in line.split()]
-                temperature.append(line[0])
-                potential.append(line[1])
-                kinetic.append(line[2])
-                total.append(line[2] + line[1])
+                self.temperature.append(line[0])
+                self.potential.append(line[1])
+                self.kinetic.append(line[2])
+                self.total.append(line[2] + line[1])
 
 if __name__ == "__main__":
     """
@@ -52,3 +53,23 @@ if __name__ == "__main__":
     
     for sim in simulations:
         sim.read_data()
+    
+    plt.title('Energy conservation')
+    for sim in simulations:
+        plt.subplot(311)
+        plt.plot(sim.kinetic, label='$T = %0.2f$' % sim.T)
+        plt.xlabel='$t$'
+        plt.ylabel='$E_k [eV]$'
+        plt.legend(loc='best')
+        plt.subplot(312)
+        plt.plot(sim.potential, label='$T = %0.2f$' % sim.T)
+        plt.xlabel='$t$'
+        plt.ylabel='$U [eV]$'
+        plt.legend(loc='best')
+        plt.subplot(313)
+        plt.plot(sim.total, label='$T = %0.2f$' % sim.T)
+        plt.xlabel='$t$'
+        plt.ylabel='$E_{\\mathrm{tot}} [eV]$'
+        plt.legend(loc='best')
+    plt.grid('on')
+    plt.show()

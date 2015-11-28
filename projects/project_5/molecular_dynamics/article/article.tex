@@ -1,8 +1,9 @@
-\documentclass{article}
+\documentclass[a4paper]{article}
 \usepackage[]{enumerate} 
 \usepackage[]{graphicx} 
 \usepackage[]{subcaption} 
 \usepackage[]{amsthm, amsmath, amssymb} 
+\usepackage[]{fancyhdr}
 \usepackage[]{hyperref} 
 \urlstyle{sf}
 \graphicspath{{../pictures/}}
@@ -20,6 +21,14 @@
 
 \begin{document}
 \maketitle    
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{ch.pdf}
+\end{figure}
+
+\begin{abstract}
+\end{abstract}
 \tableofcontents
 \section{Introduction}
 \label{sec:introduction}
@@ -316,7 +325,7 @@
     
     We are also interested in the instantaneous temperature of the system, and
     the equipartition theorem \cite{equipar} can help us with this. The theorem
-    relates the average energy of a system to its temperaturkke and gives us the
+    relates the average energy of a system to its temperature and gives us the
     relation $\langle E_k \rangle = (3/2)k_bT$ which can be solved for
     temperature:
     \begin{equation}
@@ -336,12 +345,13 @@ devised in the previous section.
 \subsection{Energy conservation of integration method}
 \label{sub:energy_conservation_of_integration_method}
 
-We initially decided to use the Velocity-Verlet integration method as opposed
-to Euler-Cromer for its good energy conservation. We now simulate a set of
-similar systems with varying temperature and look at how the fluctuations in
-total energy scales with the timestep $\Delta T$. In order to do this we can
-consider the standard-devation of the total energy.
-
+We initially decided to use the Velocity-Verlet integration method instead of
+Euler-Cromer because of its good energy conservation. It is therefore of
+interest to examine exactly what kind of impact this change of integration
+method has for our simulations.  We now simulate a set of similar systems with
+varying temperature and look at how the fluctuations in total energy scales
+with the timestep $\Delta T$. In order to do this we can consider the
+standard-devation of the total energy.
 
 \subsection{Melting temperature of system}
 \label{sub:melting_temperature_of_system}
