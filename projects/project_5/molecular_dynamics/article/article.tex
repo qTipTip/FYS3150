@@ -370,8 +370,28 @@ with the time step $\Delta T$. In order to do this we can consider the
 standard-deviation of the total energy. 
 
 We are going to run the simulations for a starting temperature of 300 kelvin,
-and vary the time step from $1.0 \times 10^{-16}$ to $1.0 \times 10^{-13}$
-seconds.
+and vary the time step from $1.0 \times 10^{-15}$ to $1.0 \times 10^{-14}$
+seconds with 40 intermediate values. The results, as shown in figure
+\ref{fig:energy_fluctuations}, tells us exactly how much better Velocity Verlet
+is when it comes to energy conservation.
+
+\begin{figure}[h]
+    \centering \includegraphics[width=0.8\linewidth]{energy_fluctuations.pdf}
+    \caption[Energy fluctuations]{The standard deviation of the total energy as
+        a function of the time-step $\Delta t$ with the energy being per atom.
+        This clearly shows the benefits of using Velocity-Verlet over
+    Euler-Cromer. While Euler-Cromer gives rise to fluctuations that scale
+somewhat linearly in the time step $\Delta t$, the fluctuations attributed to
+Velocity-Verlet is negligible in comparison.}
+    \label{fig:energy_fluctuations}
+\end{figure}
+
+\subsection{Initial to final temperature}
+\label{sub:initial_to_final_temperature}
+
+We are now interested in determining what initial temperature $T_i$ is needed
+in order to have a final temperature of $T$.  One way of examining this is by
+looking at the ratio $T/T_i$. 
 \subsection{Melting temperature of system}
 \label{sub:melting_temperature_of_system}
 
