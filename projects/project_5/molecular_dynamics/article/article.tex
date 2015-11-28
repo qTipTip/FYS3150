@@ -351,8 +351,17 @@
     We also need a way of changing the time step $\Delta t$ used in the
     simulations. This is also implemented as a command line argument, and we
     use a default time step of $\Delta t = 1.0 \times 10^{-15}$ seconds.
+    
+    In order to compute the \emph{mean square displacement} in section
+    \ref{sub:melting_temperature_of_system} we need to keep track of the
+    initial position of each atom. We therefore introduce a variable
+    \texttt{m\_initialPosition} in the \texttt{Atom-class} which is set during
+    initialization.  When computing the diffusion constant $D$, we need to make
+    sure that $r_i^2(t)$ is the true displacement, and not the displacement
+    relative to the nearest periodic image. This will be implemented in the
+    \texttt{applyBoundaryConditions}-method.
 
-    \section{Simulations}
+\section{Simulations}
 \label{sec:simulations}
 
 In this section we consider various systems and simulate them using the program
@@ -422,7 +431,16 @@ temperature has been highlighted in black.}
 \subsection{Melting temperature of system}
 \label{sub:melting_temperature_of_system}
 
-
+In order to measure the melting temperature of the system, we can use the Einstein relation which states the following:
+\begin{equation}
+    \notag
+    \langle r^2(t) \rangle = 6Dt.
+\end{equation}
+$D$ is here the diffusion constant, $t$ is time and the \emph{mean square displacement} is calculated as
+\begin{equation}
+    \notag
+    r_i^2(t) = \left| \vec{r}_i(t) - \vec{r}_i(0) \right|^2.
+\end{equation}
 \listoffigures      
 
 \begin{thebibliography}{9}
