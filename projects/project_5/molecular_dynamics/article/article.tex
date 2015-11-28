@@ -391,7 +391,34 @@ Velocity-Verlet is negligible in comparison.}
 
 We are now interested in determining what initial temperature $T_i$ is needed
 in order to have a final temperature of $T$.  One way of examining this is by
-looking at the ratio $T/T_i$. 
+looking at the ratio $T/T_i$. As we can see in \ref{fig:temperature_ratio} the
+ratio stabilizes around $T/T_i = 0.5$. Solving this for $T_i$ tells us that if
+we are interested in a final temperature of $T$, then we should chose our
+initial temperature to be
+\begin{equation}
+    \notag
+    T_i = 2T.
+\end{equation}
+
+As we see from the plot, the temperature drastically drops just after the
+initial state. This is because $T \propto E_k$, i.e., the temperature is
+proportional to the kinetic energy, and since the potential has not yet kicked
+in, the kinetic energy is at its maximum. While what we have just observed is
+an empirical result, we can alternatively look at the virial theorem
+\cite{virial}, which relates the time average of the kinetic energy to the time
+average of the potential energy. This gives us a description of this
+stabilization independent of the temperature. 
+
+\begin{figure}[h]
+    \centering \includegraphics[width=0.8\linewidth]{temperature_ratio.pdf}
+    \caption[Temperature ratio]{Plotting the ratio between initial and
+        instantaneous temperature for varying $T_i$. Here the initial
+        temperatures ranges from 20 to 500 kelvin, with 48 intermediate steps.
+    As we can see the ratio stabilizes around 0.5. The graph of an arbitrary
+temperature has been highlighted in black.}
+    \label{fig:temperature_ratio}
+\end{figure}
+
 \subsection{Melting temperature of system}
 \label{sub:melting_temperature_of_system}
 
@@ -404,6 +431,8 @@ looking at the ratio $T/T_i$.
     \url{https://en.wikipedia.org/wiki/Periodic_boundary_conditions#Practical_implementation:_continuity_and_the_minimum_image_convention}
 \bibitem{equipar}
     \url{https://en.wikipedia.org/wiki/Equipartition\_theorem}
+\bibitem{virial}
+    \url{https://en.wikipedia.org/wiki/Virial_theorem#Time_averaging}
 \end{thebibliography}
 
 
