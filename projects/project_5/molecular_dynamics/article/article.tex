@@ -62,7 +62,8 @@
         \item Introduce the force model to the system, given by the Lennard-Jones potential.
         \item Implement the Velocity-Verlet algorithm in order to get a better
             conservation of energy.
-        \item Write functions for sampling and storing physical quantities
+        \item Write functions for sampling and storing physical quantities.
+        \item Miscellaneous changes.
     \end{enumerate}
     
     Running the program in its initial state yields a random configuration of
@@ -70,6 +71,7 @@
     straight lines determined by their initial velocity vector. Their motion is
     unbounded, due to the periodic boundary condition not being implemented
     yet. This can be seen in figure \ref{fig:first_iteration}.
+
     \begin{figure}
         \centering \includegraphics[width=0.4\linewidth]{first_iteration.png}
         \caption[Initial state of the program]{First iteration of the program --- no boundary conditions and
@@ -335,8 +337,22 @@
     Notice the removal of the brackets --- we are only interested in the
     \emph{instantaneous} temperature at any point in time. We also recall that
     since our units are scaled, Boltzmann's constant is equal to one.
+    
+    \subsection{Miscellaneous changes}
+    \label{sub:miscellaneous_changes}
+    
+    In order to ease the implementation of the python framework used to run the
+    simulations, we need to make some auxiliary changes to the
+    \texttt{main}-method of the program. First of all, we are interested in
+    comparing the two integration methods the program currently supports, so we
+    add a fourth possible command line argument for setting the integration
+    method. The program defaults to Velocity-Verlet.  
+    
+    We also need a way of changing the time step $\Delta t$ used in the
+    simulations. This is also implemented as a command line argument, and we
+    use a default time step of $\Delta t = 1.0 \times 10^{-15}$ seconds.
 
-\section{Simulations}
+    \section{Simulations}
 \label{sec:simulations}
 
 In this section we consider various systems and simulate them using the program
@@ -350,9 +366,12 @@ Euler-Cromer because of its good energy conservation. It is therefore of
 interest to examine exactly what kind of impact this change of integration
 method has for our simulations.  We now simulate a set of similar systems with
 varying temperature and look at how the fluctuations in total energy scales
-with the timestep $\Delta T$. In order to do this we can consider the
-standard-devation of the total energy.
+with the time step $\Delta T$. In order to do this we can consider the
+standard-deviation of the total energy. 
 
+We are going to run the simulations for a starting temperature of 300 kelvin,
+and vary the time step from $1.0 \times 10^{-16}$ to $1.0 \times 10^{-13}$
+seconds.
 \subsection{Melting temperature of system}
 \label{sub:melting_temperature_of_system}
 
