@@ -297,8 +297,8 @@
         \label{fig:potential_iteration}
     \end{figure}
 
-    \subsection{Velocity Verlet, a symplectic integrator}
-    \label{sub:velocity_verlet_a_symplectic_integrator}
+\subsection{Velocity Verlet, a symplectic integrator}
+\label{sub:velocity_verlet_a_symplectic_integrator}
     
     In order to improve upon the fairly poor energy conservation of the
     Euler-Cromer method, we chose to implement the Velocity Verlet integrator.
@@ -384,81 +384,81 @@
 In this section we consider various systems and simulate them using the program
 devised in the previous section.
 
-\subsection{Energy conservation of integration method}
-\label{sub:energy_conservation_of_integration_method}
+    \subsection{Energy conservation of integration method}
+    \label{sub:energy_conservation_of_integration_method}
 
-We initially decided to use the Velocity-Verlet integration method instead of
-Euler-Cromer because of its good energy conservation. It is therefore of
-interest to examine exactly what kind of impact this change of integration
-method has for our simulations.  We now simulate a set of similar systems and
-look at how the fluctuations in total energy scales with the time step $\Delta
-T$. In order to do this we can consider the standard-deviation of the total
-energy. 
+    We initially decided to use the Velocity-Verlet integration method instead of
+    Euler-Cromer because of its good energy conservation. It is therefore of
+    interest to examine exactly what kind of impact this change of integration
+    method has for our simulations.  We now simulate a set of similar systems and
+    look at how the fluctuations in total energy scales with the time step $\Delta
+    T$. In order to do this we can consider the standard-deviation of the total
+    energy. 
 
-We are going to run the simulations for a starting temperature of 300 kelvin,
-and vary the time step from $1.0 \times 10^{-15}$ to $1.0 \times 10^{-14}$
-seconds with 40 intermediate values. The results, as shown in figure
-\ref{fig:energy_fluctuations}, tells us exactly how much better Velocity Verlet
-is when it comes to energy conservation.
+    We are going to run the simulations for a starting temperature of 300 kelvin,
+    and vary the time step from $1.0 \times 10^{-15}$ to $1.0 \times 10^{-14}$
+    seconds with 40 intermediate values. The results, as shown in figure
+    \ref{fig:energy_fluctuations}, tells us exactly how much better Velocity Verlet
+    is when it comes to energy conservation.
 
-\begin{figure}[h]
-    \centering \includegraphics[width=0.8\linewidth]{energy_fluctuations.pdf}
-    \caption[Energy fluctuations]{The standard deviation of the total energy as
-        a function of the time-step $\Delta t$ with the energy being per atom.
-        This clearly shows the benefits of using Velocity-Verlet over
-    Euler-Cromer. While Euler-Cromer gives rise to fluctuations that scale
-somewhat linearly in the time step $\Delta t$, the fluctuations attributed to
-Velocity-Verlet is negligible in comparison.}
-    \label{fig:energy_fluctuations}
-\end{figure}
+    \begin{figure}[h]
+        \centering \includegraphics[width=0.8\linewidth]{energy_fluctuations.pdf}
+        \caption[Energy fluctuations]{The standard deviation of the total energy as
+            a function of the time-step $\Delta t$ with the energy being per atom.
+            This clearly shows the benefits of using Velocity-Verlet over
+        Euler-Cromer. While Euler-Cromer gives rise to fluctuations that scale
+    somewhat linearly in the time step $\Delta t$, the fluctuations attributed to
+    Velocity-Verlet is negligible in comparison.}
+        \label{fig:energy_fluctuations}
+    \end{figure}
 
 \subsection{Initial to final temperature}
 \label{sub:initial_to_final_temperature}
 
-We are now interested in determining what initial temperature $T_i$ is needed
-in order to have a final temperature of $T$.  One way of examining this is by
-looking at the ratio $T/T_i$. As we can see in figure \ref{fig:temperature_ratio} the
-ratio stabilizes around $T/T_i = 0.5$. Solving this for $T_i$ tells us that if
-we are interested in a final temperature of $T$, then we should chose our
-initial temperature to be
-\begin{equation}
-    \notag
-    T_i = 2T.
-\end{equation}
+    We are now interested in determining what initial temperature $T_i$ is needed
+    in order to have a final temperature of $T$.  One way of examining this is by
+    looking at the ratio $T/T_i$. As we can see in figure \ref{fig:temperature_ratio} the
+    ratio stabilizes around $T/T_i = 0.5$. Solving this for $T_i$ tells us that if
+    we are interested in a final temperature of $T$, then we should chose our
+    initial temperature to be
+    \begin{equation}
+        \notag
+        T_i = 2T.
+    \end{equation}
 
-As we see from the plot, the temperature drastically drops just after the
-initial state. This is because $T \propto E_k$, i.e., the temperature is
-proportional to the kinetic energy, and since the potential has not yet kicked
-in, the kinetic energy is at its maximum. While what we have just observed is
-an empirical result, we can alternatively look at the virial theorem
-\cite{virial}, which relates the time average of the kinetic energy to the time
-average of the potential energy. This gives us a description of this
-stabilization independent of the temperature. 
+    As we see from the plot, the temperature drastically drops just after the
+    initial state. This is because $T \propto E_k$, i.e., the temperature is
+    proportional to the kinetic energy, and since the potential has not yet kicked
+    in, the kinetic energy is at its maximum. While what we have just observed is
+    an empirical result, we can alternatively look at the virial theorem
+    \cite{virial}, which relates the time average of the kinetic energy to the time
+    average of the potential energy. This gives us a description of this
+    stabilization independent of the temperature. 
 
-\begin{figure}[h]
-    \centering \includegraphics[width=\linewidth]{temperature_ratio.pdf}
-    \caption[Temperature ratio]{Plotting the ratio between initial and
-        instantaneous temperature for varying $T_i$. Here the initial
-        temperatures ranges from 20 to 500 kelvin, with 48 intermediate steps.
-    As we can see the ratio stabilizes around 0.5. The graph of an arbitrary
-temperature has been highlighted in black.}
-    \label{fig:temperature_ratio}
-\end{figure}
+    \begin{figure}[h]
+        \centering \includegraphics[width=\linewidth]{temperature_ratio.pdf}
+        \caption[Temperature ratio]{Plotting the ratio between initial and
+            instantaneous temperature for varying $T_i$. Here the initial
+            temperatures ranges from 20 to 500 kelvin, with 48 intermediate steps.
+        As we can see the ratio stabilizes around 0.5. The graph of an arbitrary
+    temperature has been highlighted in black.}
+        \label{fig:temperature_ratio}
+    \end{figure}
 
 \subsection{Melting temperature of system}
 \label{sub:melting_temperature_of_system}
 
-In order to measure the melting temperature of the system, we can use the Einstein relation which states the following:
-\begin{equation}
-    \notag
-    \langle r^2(t) \rangle = 6Dt.
-\end{equation}
-$D$ is here the diffusion constant, $t$ is time and the \emph{mean square displacement} is calculated as
-\begin{equation}
-    \notag
-    r_i^2(t) = \left| \vec{r}_i(t) - \vec{r}_i(0) \right|^2
-\end{equation}
-for atom $i$.
+    In order to measure the melting temperature of the system, we can use the Einstein relation which states the following:
+    \begin{equation}
+        \notag
+        \langle r^2(t) \rangle = 6Dt.
+    \end{equation}
+    $D$ is here the diffusion constant, $t$ is time and the \emph{mean square displacement} is calculated as
+    \begin{equation}
+        \notag
+        r_i^2(t) = \left| \vec{r}_i(t) - \vec{r}_i(0) \right|^2
+    \end{equation}
+    for atom $i$.
 
 \clearpage
 
