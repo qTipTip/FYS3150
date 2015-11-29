@@ -28,8 +28,19 @@
 \end{figure}
 
 \begin{abstract}
+    In this project we explore the world of molecular dynamics. We are first
+    presented with the skeleton of a working MD-program, and we are asked to
+    implement the functionality we need as we go along. We look at the time
+    evolution of a system of argon, with an initial face-centered cubic lattice
+    configuration. The atoms are under the influence of the Lennard-Jones
+    potential. We use the Velocity-Verlet as our time integrator of choice, and
+    we compare this to the Euler-Cromer method in terms of energy conservation
+    properties. We also compute the melting temperature of argon, by means of
+    the Einstein relation and diffusion constant.
 \end{abstract}
 \tableofcontents
+\listoffigures      
+
 \section{Introduction}
 \label{sec:introduction}
     Molecular dynamics (referred to as MD), deals with the time evolution of a
@@ -47,13 +58,19 @@
     desired final temperature, and finding the diffusion constant for the
     system in order to compute the melting temperature.
 
+    The construction of the program will be covered in section
+    \ref{sec:building_a_working_md_program}, where some of the motivation
+    behind each addition to the program will be discussed. In section
+    \ref{sec:simulations} we employ our newly implemented program and look at
+    some specific systems.
+
 \section{Building a working MD-program}
 \label{sec:building_a_working_md_program}
     
     Initially, we are presented with the skeleton of a MD-program, and we are
     tasked with filling in the blanks. In this section, we walk through each of
     the steps that went into the implementation of the program, from skeleton
-    to working program. The process can be summarized as
+    to working program. The process can be summarized as following:
     
     \begin{enumerate}[1)]
         \item Introduce periodic boundary conditions.
@@ -85,8 +102,8 @@
 \label{sub:periodic_boundary_conditions}
         
     We want our system to conform to periodic boundary conditions. The reasons
-    for doing this is that to a certain extent the system of finite size more
-    closely resembles that of an infinite size. It is important that the
+    for doing this is that a finite system with periodic boundary condition
+    more closely resembles that of an infinite size. It is important that the
     bounding box which determines the boundary of the system is of sufficient
     size, so we do not get artifacts that arise from the fact that an atom can
     interact with itself. 
@@ -139,7 +156,7 @@
     Mathematically, the distribution function reads
     \begin{equation}
         \notag
-        P(v_i)\, dv_i = \left( \frac{m_i}{2\pi k_BT} \right)^{1/2} e
+        P(v_i)\, dv_i = \left( \frac{m_i}{2\pi k_BT} \right)^{1/2} e^{-\frac{mv_i^2}{2k_BT}}dv_i
     \end{equation}
     
     The problem that arises when using the Maxwell-Boltzmann distribution is
@@ -295,7 +312,7 @@
     We implement this algorithm in the \texttt{integrate} method in the
     \texttt{VelocityVerlet}-class. The method takes a system of atoms and a
     time step $\Delta t$ as arguments. We also introduce the private auxiliary
-    variable \texttt{m\_first\_step}, which helps us takes care of the initial
+    variable \texttt{m\_first\_step}, which helps us take care of the initial
     calculation of the forces.
     
     Of interest now is how our new method of integration compares with the old
@@ -328,11 +345,11 @@
     We are also interested in the instantaneous temperature of the system, and
     the equipartition theorem \cite{equipar} can help us with this. The theorem
     relates the average energy of a system to its temperature and gives us the
-    relation $\langle E_k \rangle = (3/2)k_bT$ which can be solved for
+    relation $\langle E_k \rangle = (3/2)k_BT$ which can be solved for
     temperature:
     \begin{equation}
         \notag
-        T = \frac{2}{3} \frac{E_k}{nk_b}.
+        T = \frac{2}{3} \frac{E_k}{nk_B}.
     \end{equation}
     Notice the removal of the brackets --- we are only interested in the
     \emph{instantaneous} temperature at any point in time. We also recall that
@@ -373,10 +390,10 @@ devised in the previous section.
 We initially decided to use the Velocity-Verlet integration method instead of
 Euler-Cromer because of its good energy conservation. It is therefore of
 interest to examine exactly what kind of impact this change of integration
-method has for our simulations.  We now simulate a set of similar systems with
-varying temperature and look at how the fluctuations in total energy scales
-with the time step $\Delta T$. In order to do this we can consider the
-standard-deviation of the total energy. 
+method has for our simulations.  We now simulate a set of similar systems and
+look at how the fluctuations in total energy scales with the time step $\Delta
+T$. In order to do this we can consider the standard-deviation of the total
+energy. 
 
 We are going to run the simulations for a starting temperature of 300 kelvin,
 and vary the time step from $1.0 \times 10^{-15}$ to $1.0 \times 10^{-14}$
@@ -400,7 +417,7 @@ Velocity-Verlet is negligible in comparison.}
 
 We are now interested in determining what initial temperature $T_i$ is needed
 in order to have a final temperature of $T$.  One way of examining this is by
-looking at the ratio $T/T_i$. As we can see in \ref{fig:temperature_ratio} the
+looking at the ratio $T/T_i$. As we can see in figure \ref{fig:temperature_ratio} the
 ratio stabilizes around $T/T_i = 0.5$. Solving this for $T_i$ tells us that if
 we are interested in a final temperature of $T$, then we should chose our
 initial temperature to be
@@ -419,7 +436,7 @@ average of the potential energy. This gives us a description of this
 stabilization independent of the temperature. 
 
 \begin{figure}[h]
-    \centering \includegraphics[width=0.8\linewidth]{temperature_ratio.pdf}
+    \centering \includegraphics[width=\linewidth]{temperature_ratio.pdf}
     \caption[Temperature ratio]{Plotting the ratio between initial and
         instantaneous temperature for varying $T_i$. Here the initial
         temperatures ranges from 20 to 500 kelvin, with 48 intermediate steps.
@@ -439,20 +456,18 @@ In order to measure the melting temperature of the system, we can use the Einste
 $D$ is here the diffusion constant, $t$ is time and the \emph{mean square displacement} is calculated as
 \begin{equation}
     \notag
-    r_i^2(t) = \left| \vec{r}_i(t) - \vec{r}_i(0) \right|^2.
+    r_i^2(t) = \left| \vec{r}_i(t) - \vec{r}_i(0) \right|^2
 \end{equation}
-\listoffigures      
+for atom $i$.
+
+\clearpage
 
 \begin{thebibliography}{9}
-
 \bibitem{min_image}
     \url{https://en.wikipedia.org/wiki/Periodic_boundary_conditions#Practical_implementation:_continuity_and_the_minimum_image_convention}
 \bibitem{equipar}
     \url{https://en.wikipedia.org/wiki/Equipartition\_theorem}
 \bibitem{virial}
-    \url{https://en.wikipedia.org/wiki/Virial_theorem#Time_averaging}
+    \url{https://en.wikipedia.org/wiki/Virial_theorem}
 \end{thebibliography}
-
-
-
 \end{document}
