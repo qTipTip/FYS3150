@@ -81,4 +81,32 @@ def taskF(run_simulations=False):
     plt.ylabel('$T / T_i$')
     plt.savefig('temperature_ratio.pdf')
 
-taskF(False)
+def taskG(run_simulations=False):
+    """
+    This method runs a set of simulations for varying initial temperature T
+    and looks at the diffusion constant. This is in order to measure the melting
+    point of the system.
+    """
+
+    simulations = []
+
+    T_values = range(400, 2000, 100)
+    b = 5.26
+    N = 10
+    description = 'diffusion_constant'
+    for i, T_i in enumerate(T_values):
+        simulations.append(System(T = T_i, b=5.26, N_each_dimension=N, ID=i, simulation_description=description))
+
+    if run_simulations:
+        for sim in simulations:
+            sim.run_simulations()
+
+    for sim in simulations:
+        sim.read_data()
+        plt.plot(sim.diffusion)
+    plt.xlabel('$t$')
+    plt.ylabel('$D = \\langle r^2(t) \\rangle / 6t$')
+    plt.grid('on')
+    plt.savefig('diffusion_constant.pdf')
+
+taskG(True)

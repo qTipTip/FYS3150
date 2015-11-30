@@ -376,7 +376,10 @@
     initialization.  When computing the diffusion constant $D$, we need to make
     sure that $r_i^2(t)$ is the true displacement, and not the displacement
     relative to the nearest periodic image. This will be implemented in the
-    \texttt{applyBoundaryConditions}-method.
+    \texttt{applyBoundaryConditions}-method and is as simple as in addition to
+    moving the position of the atom, also move the initial position of the atom
+    by the same amount, because then the relative distance between instantaneous
+    position and initial position is equal to the true displacement.
 
 \section{Simulations}
 \label{sec:simulations}
@@ -448,17 +451,24 @@ devised in the previous section.
 \subsection{Melting temperature of system}
 \label{sub:melting_temperature_of_system}
 
-    In order to measure the melting temperature of the system, we can use the Einstein relation which states the following:
+    In order to measure the melting temperature of the system, we can use the
+    Einstein relation which states the following:
     \begin{equation}
         \notag
         \langle r^2(t) \rangle = 6Dt.
     \end{equation}
-    $D$ is here the diffusion constant, $t$ is time and the \emph{mean square displacement} is calculated as
+    $D$ is here the diffusion constant, $t$ is time and the \emph{mean square
+    displacement} is calculated as
     \begin{equation}
         \notag
         r_i^2(t) = \left| \vec{r}_i(t) - \vec{r}_i(0) \right|^2
     \end{equation}
-    for atom $i$.
+    for atom $i$. Solving this for $D$ gives yields
+    \begin{equation}
+        \notag
+        D = \frac{\langle r^2(t) \rangle}{6t}.
+    \end{equation}
+    We can now make set of simulations for varying initial temperature $T$.
 
 \clearpage
 

@@ -10,7 +10,7 @@ class System:
         b: lattice constant  
     """
 
-    def __init__(self, T=300, dt=1.0e-15, N_each_dimension=5, b=5.26, ID = 1, simulation_description='example'):
+    def __init__(self, T=300, dt=5.0e-15, N_each_dimension=5, b=5.26, ID = 1, simulation_description='example'):
         self.T = T
         self.N_each_dimension = N_each_dimension
         self.b = b
@@ -36,6 +36,7 @@ class System:
         self.potential = []
         self.kinetic = []
         self.total = []
+        self.diffusion = []
         
         with open(self.file_name, 'r') as data_file:
             for line in data_file:
@@ -44,7 +45,9 @@ class System:
                 self.potential.append(line[1])
                 self.kinetic.append(line[2])
                 self.total.append(line[2] + line[1])
+                self.diffusion.append(line[4])
         self.temperature = np.array(self.temperature)
         self.potential = np.array(self.potential)
         self.kinetic = np.array(self.kinetic)
         self.total = np.array(self.total)
+        self.diffusion = np.array(self.diffusion)
