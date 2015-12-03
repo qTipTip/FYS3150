@@ -258,7 +258,44 @@
     constitutes a fairly heavy computational load that quickly scales with the
     size of the system. For a total of $n$ atoms in the system, we have a time
     complexity of $\mathcal{O}(n^2)$. Luckily more efficient methods are
-    available, most notably is the Verlet list method. 
+    available, most notably is the Cell list method. 
+
+    \subsubsection{Cell lists}
+    \label{ssub:cell_lists}
+    
+    The main idea behind cell lists is that at some fixed distance, the force
+    induced by the potential between two atoms is negligible and there is
+    therefore no need for computing it. If we for each atom $i$ keep track of
+    all atoms within this fixed distance, which we will call $r_\mathrm{cut}$,
+    at any given time step, we can greatly reduce the number of computations
+    needed. 
+
+    We divide the domain of our system into \emph{cells}, each with an edge
+    length of at least the cut-of radius of the potential. This ensures that if
+    we only compute the mutual forces between atoms in the same or adjacent
+    cells, then the atoms are never a distance farther than $r_\mathrm{cut}$
+    apart. For each integration step we check the validity of the list of
+    neighbors for each atom by iterating through each atom in the system, and
+    checking whether it has moved a distance larger than $r_\mathrm{cut}$ since
+    the last time the list of neighbors was built. 
+   
+    We additionally need to rescale our potential so that it takes into
+    consideration the cut-off radius. We define the scaled potential $U' =
+    U(r_{ij}) - U(r_\mathrm{cut})$ when $r_{ij} < r_\mathrm{cut}$ and 0
+    otherwise.
+    
+    There is a quite subtle consideration which is often overlooked, and that
+    is the fact that in order to make use of cell-lists, we need a sufficient
+    number of unit cells in each dimensions. Otherwise, there is not enough
+    room for our cells.  In the program, if the number of unit cells is less
+    than or equal to 5, we employ our old potential. If it is larger, we use
+    the new scaled potential with cell lists.
+
+    By implementing cell-lists we reduce the computation of the forces from
+    $\mathcal{O}(N^2)$ to $\mathcal{O}(N)$. 
+   
+    \subsubsection{Choice of parameters}
+    \label{ssub:choice_of_parameters}
     
     We need to chose the parameters $\sigma$ and $\varepsilon$ so that they are
     suited for simulation of argon. It turns out that $\sigma = 3.405
@@ -468,9 +505,23 @@ devised in the previous section.
         \notag
         D = \frac{\langle r^2(t) \rangle}{6t}.
     \end{equation}
-    We can now make set of simulations for varying initial temperature $T$ and
-    store the final value for the diffusion constant for each $T$.
-
+    We can now make set of simulations for varying initial temperature $T_i$
+    and store the final value for the diffusion constant for each final
+    temperature $T$. The results are shown in figure
+    \ref{fig:diffusion_constant} and tells us that the system melts around a
+    temperature of $T = 0.5T_i$, which here amounts to a temperature of about
+    $304K$.
+    
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\linewidth]{diffusion_constant.pdf}
+        \caption[Diffusion constant]{The diffusion constant as a function of temperature. We here
+                see that $D$ abruptly increases at the temperature of $T = 304K$
+                which indicates that the crystal is melting.  The two lines are the
+                least square solutions to the noisy data before and after,
+                respectively. The diffusion constant is given in units of area per second.}
+        \label{fig:diffusion_constant}
+    \end{figure}
 \clearpage
 
 \begin{thebibliography}{9}

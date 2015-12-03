@@ -90,12 +90,12 @@ def taskG(run_simulations=False):
 
     simulations = []
 
-    T_values = range(400, 800, 5)
+    T_values = range(400, 1000, 5)
     b = 5.26
     N = 6
     description = 'diffusion_constant'
     for i, T_i in enumerate(T_values):
-        simulations.append(System(T = T_i, b=5.26, N_each_dimension=N, ID=i, simulation_description=description))
+        simulations.append(System(T = T_i, b=b, N_each_dimension=N, ID=i, simulation_description=description))
 
     if run_simulations:
         for sim in simulations:
@@ -109,20 +109,20 @@ def taskG(run_simulations=False):
     diffusion = np.array(diffusion)
     T_values = np.array(T_values)
 
-    T_before_melt = np.nonzero(T_values < 620)
-    T_after_melt = np.nonzero(T_values >= 615)
+    T_before_melt = np.nonzero(T_values < 600)
+    T_after_melt = np.nonzero(T_values >= 600)
     
     print T_values[T_before_melt][-1]
-    A = np.vstack([T_values[T_before_melt], np.ones(len(T_values[T_before_melt]))]).T
+    A = np.vstack([T_values[T_before_melt]/2.0, np.ones(len(T_values[T_before_melt]))]).T
     m, c = np.linalg.lstsq(A, diffusion[T_before_melt])[0]
-    plt.plot(T_values[T_before_melt], m*T_values[T_before_melt] + c)
+    plt.plot(T_values[T_before_melt]/2.0, m*T_values[T_before_melt]/2.0 + c, label='$D$ before melting')
 
-    A = np.vstack([T_values[T_after_melt], np.ones(len(T_values[T_after_melt]))]).T
+    A = np.vstack([T_values[T_after_melt]/2.0, np.ones(len(T_values[T_after_melt]))]).T
     m, c = np.linalg.lstsq(A, diffusion[T_after_melt])[0]
-    plt.plot(T_values[T_after_melt], m*T_values[T_after_melt] + c, )
-
-    plt.plot(T_values, diffusion, 'bo', alpha=0.5)
-    plt.xlabel('$t \\quad [K]$')
+    plt.plot(T_values[T_after_melt]/2.0, m*T_values[T_after_melt]/2.0 + c, label='$D$ after melting')
+    plt.plot(T_values/2.0, diffusion, 'bo', alpha=0.5)
+    plt.legend(loc='best')
+    plt.xlabel('$T \\quad [K]$')
     plt.ylabel('$D = \\langle r^2(t) \\rangle / 6t \\quad [m^2/s]$')
     plt.grid('on')
     plt.savefig('diffusion_constant.pdf')
