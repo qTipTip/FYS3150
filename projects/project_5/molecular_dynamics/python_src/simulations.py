@@ -83,16 +83,16 @@ def taskF(run_simulations=False):
 
 def taskG(run_simulations=False):
     """
-    This method runs a set of simulations for varying initial temperature T
-    and looks at the diffusion constant. This is in order to measure the melting
-    point of the system.
+    This method runs a set of simulations for varying initial temperature T and
+    looks at the diffusion constant. This is in order to measure the melting
+    point of the system. We pick the final D of the simulation.
     """
 
     simulations = []
 
-    T_values = range(400, 2000, 100)
+    T_values = range(400, 800, 5)
     b = 5.26
-    N = 10
+    N = 6
     description = 'diffusion_constant'
     for i, T_i in enumerate(T_values):
         simulations.append(System(T = T_i, b=5.26, N_each_dimension=N, ID=i, simulation_description=description))
@@ -100,13 +100,31 @@ def taskG(run_simulations=False):
     if run_simulations:
         for sim in simulations:
             sim.run_simulations()
-
+    
+    diffusion = []
     for sim in simulations:
         sim.read_data()
-        plt.plot(sim.diffusion)
-    plt.xlabel('$t$')
-    plt.ylabel('$D = \\langle r^2(t) \\rangle / 6t$')
+        diffusion.append(sim.diffusion[-1])
+
+    diffusion = np.array(diffusion)
+    T_values = np.array(T_values)
+
+    T_before_melt = np.nonzero(T_values < 620)
+    T_after_melt = np.nonzero(T_values >= 615)
+    
+    print T_values[T_before_melt][-1]
+    A = np.vstack([T_values[T_before_melt], np.ones(len(T_values[T_before_melt]))]).T
+    m, c = np.linalg.lstsq(A, diffusion[T_before_melt])[0]
+    plt.plot(T_values[T_before_melt], m*T_values[T_before_melt] + c)
+
+    A = np.vstack([T_values[T_after_melt], np.ones(len(T_values[T_after_melt]))]).T
+    m, c = np.linalg.lstsq(A, diffusion[T_after_melt])[0]
+    plt.plot(T_values[T_after_melt], m*T_values[T_after_melt] + c, )
+
+    plt.plot(T_values, diffusion, 'bo', alpha=0.5)
+    plt.xlabel('$t \\quad [K]$')
+    plt.ylabel('$D = \\langle r^2(t) \\rangle / 6t \\quad [m^2/s]$')
     plt.grid('on')
     plt.savefig('diffusion_constant.pdf')
 
-taskG(True)
+taskG(False)
