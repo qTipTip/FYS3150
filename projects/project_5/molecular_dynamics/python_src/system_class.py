@@ -37,6 +37,7 @@ class System:
         self.kinetic = []
         self.total = []
         self.diffusion = []
+        self.time = []
         
         with open(self.file_name, 'r') as data_file:
             for line in data_file:
@@ -46,8 +47,11 @@ class System:
                 self.kinetic.append(line[2])
                 self.total.append(line[2] + line[1])
                 self.diffusion.append(line[4])
+                self.time.append(line[5])
+
         self.temperature = np.array(self.temperature)
         self.potential = np.array(self.potential)
         self.kinetic = np.array(self.kinetic)
         self.total = np.array(self.total)
         self.diffusion = np.array(self.diffusion)
+        self.time = np.array(self.time)

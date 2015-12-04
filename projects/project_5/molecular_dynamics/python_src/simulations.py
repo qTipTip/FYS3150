@@ -60,7 +60,7 @@ def taskF(run_simulations=False):
     
     T_values = range(20, 500, 10) 
     b = 5.26
-    N = 5
+    N = 6
     description = 'temperature_ratios' 
     for i, T_i in enumerate(T_values):
         simulations.append([System(T=T_i, b=5.26, N_each_dimension=5, ID=i, simulation_description=description), T_i])
@@ -72,12 +72,12 @@ def taskF(run_simulations=False):
     for i, sim in enumerate(simulations):
         sim[0].read_data()
         if i == int(len(simulations) / 2):
-            plt.plot(sim[0].temperature / sim[1], 'black', alpha=1.0)
+            plt.plot(sim[0].time[:500], sim[0].temperature[:500] / sim[1], 'black', alpha=1.0)
             continue;
-        plt.plot(sim[0].temperature / sim[1], alpha=0.3)
+        plt.plot(sim[0].time[:500], sim[0].temperature[:500] / sim[1], alpha=0.3)
 
     plt.grid('on')
-    plt.xlabel('$t$')
+    plt.xlabel('$t \\quad [ps/10]$')
     plt.ylabel('$T / T_i$')
     plt.savefig('temperature_ratio.pdf')
 
@@ -127,4 +127,5 @@ def taskG(run_simulations=False):
     plt.grid('on')
     plt.savefig('diffusion_constant.pdf')
 
-taskG(False)
+
+taskF(False)

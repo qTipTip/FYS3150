@@ -4,6 +4,7 @@
 \usepackage[]{subcaption} 
 \usepackage[]{amsthm, amsmath, amssymb} 
 \usepackage[]{fancyhdr}
+\usepackage[]{setspace} 
 \usepackage[]{hyperref} 
 \urlstyle{sf}
 \graphicspath{{../pictures/}}
@@ -38,8 +39,10 @@
     properties. We also compute the melting temperature of argon, by means of
     the Einstein relation and diffusion constant.
 \end{abstract}
+\doublespacing
 \tableofcontents
 \listoffigures      
+\singlespacing
 
 \section{Introduction}
 \label{sec:introduction}
@@ -158,14 +161,25 @@
         \notag
         P(v_i)\, dv_i = \left( \frac{m_i}{2\pi k_BT} \right)^{1/2} e^{-\frac{mv_i^2}{2k_BT}}dv_i
     \end{equation}
-    
+
+    As shown in figure \ref{fig:maxwell_boltzmann}, increasing the temperature
+    yields a more even velocity distribution. 
     The problem that arises when using the Maxwell-Boltzmann distribution is
     that in its initial state the system has a non-zero net momentum. This
     causes the system to drift. This is why we want to implement the function
     \texttt{removeMomentum} in the \texttt{System}-class. Its purpose is to
     compute the total momentum of the system, and then remove a small portion
     of momentum from each atom in order to have a net momentum of zero. 
-    
+
+    \begin{figure}[h]
+        \centering \includegraphics[width=0.7\linewidth]{maxwell_boltzmann.pdf}
+        \caption[The Maxwell-Boltzmann distribution]{The Maxwell-Boltzmann
+            distribution for a varying scale parameter $a = k_BT/m$.  As we can
+            see, increasing the temperature increases the likelihood of an atom
+        being assigned an arbitrary velocity, where as for low temperatures the
+    distribution is biased towards one specific velocity.}
+        \label{fig:maxwell_boltzmann}
+    \end{figure}
     We compute the velocity of the center of mass of the system, and then
     subtract this velocity from each atom.  Let $m_i$ and $v_i$ denote the mass
     and velocity of atom $i$ respectively and let $M$ and $V$ denote the total
@@ -277,7 +291,9 @@
     apart. For each integration step we check the validity of the list of
     neighbors for each atom by iterating through each atom in the system, and
     checking whether it has moved a distance larger than $r_\mathrm{cut}$ since
-    the last time the list of neighbors was built. 
+    the last time the list of neighbors was built. It is interesting to note
+    that we have to rebuild the neighbor lists more often for higher
+    temperature due to the velocities being proportional to the temperature.
    
     We additionally need to rescale our potential so that it takes into
     consideration the cut-off radius. We define the scaled potential $U' =
@@ -303,34 +319,40 @@
     MD-units.
 
     Argon has a melting point of $\approx 84$K and a boiling point of $\approx
-    87$K. If we run the simulations, once for a temperature of $40$K, once for
-    $85$K and finally once for $120K$ we should see indications of three
-    different phases. The results shows that the model somewhat accurately
-    manages to capture these phase transitions. Snapshots taken at the same
-    point in time for all three cases are presented in figure
+    87$K. If we run the simulations, once for a temperature of $80$K, once for
+    $170$K and finally once for $240K$ we should see indications of three
+    different phases (see section \ref{sub:initial_to_final_temperature} for
+    the choices of these temperatures). The results shows that the model does
+    not manage to capture these phase transitions. This is probably attributed
+    to the Lennard-Jones potential. If we run the simulations for initial
+    temperatures of $400K, 700K$ and $900K$ we should see indications of phase
+    change. We will get back to this in section
+    \ref{sub:melting_temperature_of_system}. Snapshots taken at the same point
+    in time for all three cases are presented in figure
     \ref{fig:potential_iteration}.
     \begin{figure}
         \begin{tabular}[c]{ccc}
             \begin{subfigure}[c]{0.32\textwidth}
                 \includegraphics[height=100pt, width=\linewidth]{solid_40K.png}
-                \caption{$T = 40$K}
+                \caption{$T = 400$K}
             \end{subfigure}
             \begin{subfigure}[c]{0.32\textwidth}
                 \includegraphics[height=100pt, width=\linewidth]{liquid_85K.png}
-                \caption{$T = 85$K}
+                \caption{$T = 700$K}
             \end{subfigure}
             \begin{subfigure}[c]{0.32\textwidth}
                 \includegraphics[height=100pt, width=\linewidth]{gas_120K.png}
-                \caption{$T = 120$K}
+                \caption{$T = 900$K}
             \end{subfigure}
         \end{tabular}
-        \caption[Argon phases]{Snapshots taken of the system at frame 500/999 for
-            temperatures of $40$, $85$ and $120$ kelvin. It is a bit difficult
-            to conclude from the pictures, one really needs to see the system
-            in motion, but the system do behave more or less like a solid, a
-            liquid and a gas for respective temperatures. It is possible to see a
-            certain change in the entropy of the system across the three
-            images. These made use of the Velocity-Verlet integration method.}
+        \caption[Argon phases]{Snapshots taken of the system at frame 500/999
+            for temperatures of $400$, $700$ and $900$ kelvin. It is a bit
+            difficult to conclude from the pictures, one really needs to see
+            the system in motion, but the system do behave more or less like a
+            solid, a liquid and a gas for respective temperatures. It is
+        possible to see a certain change in the entropy of the system across
+    the three images. These made use of the Velocity-Verlet integration
+method.}
         \label{fig:potential_iteration}
     \end{figure}
 
@@ -478,10 +500,12 @@ devised in the previous section.
     \begin{figure}[h]
         \centering \includegraphics[width=\linewidth]{temperature_ratio.pdf}
         \caption[Temperature ratio]{Plotting the ratio between initial and
-            instantaneous temperature for varying $T_i$. Here the initial
-            temperatures ranges from 20 to 500 kelvin, with 48 intermediate steps.
-        As we can see the ratio stabilizes around 0.5. The graph of an arbitrary
-    temperature has been highlighted in black.}
+            instantaneous temperature for varying $T_i$. Each individual graph
+            corresponds to one value of $T_i$ and the ratio is plotted against
+            time given in units of tenths of a picosecond. Here the initial
+            temperatures ranges from 20 to 500 kelvin, with 48 intermediate
+            steps.  As we can see the ratio stabilizes around $1/2$. The graph of
+            an arbitrary temperature has been highlighted in black.}
         \label{fig:temperature_ratio}
     \end{figure}
 
@@ -515,11 +539,11 @@ devised in the previous section.
     \begin{figure}[h]
         \centering
         \includegraphics[width=0.8\linewidth]{diffusion_constant.pdf}
-        \caption[Diffusion constant]{The diffusion constant as a function of temperature. We here
-                see that $D$ abruptly increases at the temperature of $T = 304K$
-                which indicates that the crystal is melting.  The two lines are the
-                least square solutions to the noisy data before and after,
-                respectively. The diffusion constant is given in units of area per second.}
+        \caption[Diffusion constant]{The diffusion constant as a function of
+            temperature. We here see that $D$ abruptly increases at the
+            temperature of $T = 304K$ which indicates that the crystal is
+        melting. The two lines are the linear graphs best fitted to the noisy
+    data.  The diffusion constant is given in units of area per second.}
         \label{fig:diffusion_constant}
     \end{figure}
 \clearpage
