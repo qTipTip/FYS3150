@@ -49,10 +49,25 @@
     Molecular dynamics (referred to as MD), deals with the time evolution of a
     system of particles, typically atoms or molecules. Being first explored in
     the late 1950's, it has had a wide range of applications, in fields as
-    materials science, biochemistry and biophysics. It is based on the simple
-    idea of considering a finite number of molecules and letting them interact
-    for a fixed amount of time, which gives us an idea of how the system
-    evolves. 
+    materials science, biochemistry and biophysics. Some of the more pioneering
+    works in molecular dynamics are often found in the study of chemical
+    physics and more specifically proteins.  In 1975, Levitt and Warshel
+    \cite{folding} simulated protein folding and in 1976 Cooper
+    \cite{thermoprotein} presented results on thermodynamic fluctuations in
+    protein folding with methods comparable to todays standards.
+    
+    In order to verify the molecular dynamics model one can for instance
+    compare with physical experiments. For molecular systems one particular
+    method is of special interest, namely nuclear magnetic resonance
+    spectroscopy.
+
+    Molecular Dynamics can take on many forms. Notable in the addition of what
+    we examine in this project, is the Monte-Carlo and Brownian dynamics
+    variants of MD. 
+     
+    It is based on the simple idea of considering a finite number of molecules
+    and letting them interact for a fixed amount of time, which gives us an
+    idea of how the system evolves. 
 
     In this project we examine what goes into creating a working MD-program
     that can compute various physical quantities and then proceed by
@@ -66,7 +81,7 @@
     behind each addition to the program will be discussed. In section
     \ref{sec:simulations} we employ our newly implemented program and look at
     some specific systems.
-
+    
 \section{Building a working MD-program}
 \label{sec:building_a_working_md_program}
     
@@ -548,12 +563,19 @@ devised in the previous section.
     \end{figure}
 \clearpage
 
+\section{Conclusion}
+\label{sec:conclusion}
+
+
+
 \begin{thebibliography}{9}
+\bibitem{folding}
+    Levitt, M., \& Warshel, A., `Computer simulation of protein folding`, Nature, Vol. 253, No. 5494. Available from: \url{http://csb.stanford.edu/levitt/Levitt_NAT75_folding.pdf}
+\bibitem{thermoprotein}
+    Cooper, A. `Thermodynamic fluctuations in protein molecules`, Proceedings of the National Academy of Sciences of the United States of America, Vol. 73, No. 8. Available from: \url{http://www.pnas.org/content/73/8/2740.full.pdf}
 \bibitem{min_image}
     \url{https://en.wikipedia.org/wiki/Periodic_boundary_conditions#Practical_implementation:_continuity_and_the_minimum_image_convention}
-\bibitem{equipar}
-    \url{https://en.wikipedia.org/wiki/Equipartition\_theorem}
-\bibitem{virial}
-    \url{https://en.wikipedia.org/wiki/Virial_theorem}
+\bibitem{equipar} \url{https://en.wikipedia.org/wiki/Equipartition\_theorem}
+\bibitem{virial} \url{https://en.wikipedia.org/wiki/Virial_theorem}
 \end{thebibliography}
 \end{document}
