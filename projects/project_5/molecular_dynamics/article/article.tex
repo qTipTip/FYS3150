@@ -1,6 +1,7 @@
 \documentclass[a4paper]{article}
 \usepackage[]{enumerate} 
 \usepackage[]{graphicx} 
+\usepackage[]{xcolor} 
 \usepackage[]{subcaption} 
 \usepackage[]{amsthm, amsmath, amssymb} 
 \usepackage[]{fancyhdr}
@@ -10,6 +11,8 @@
 \graphicspath{{../pictures/}}
 
 \renewcommand{\vec}[1]{\mathbf{#1}}
+\newcommand*{\github}[1]{\def\@github{\color{gray!70}#1}}
+\newcommand{\githublogo}{\raisebox{-1pt}{\includegraphics[height=9pt]{github}}}
 
 \title{%
     \textsc{Atomic modeling of argon}\\
@@ -37,7 +40,13 @@
     potential. We use the Velocity-Verlet as our time integrator of choice, and
     we compare this to the Euler-Cromer method in terms of energy conservation
     properties. We also compute the melting temperature of argon, by means of
-    the Einstein relation and diffusion constant.
+    the Einstein relation and diffusion constant. All visualizations of the
+    system has been performed using the program \texttt{VMD}.\\
+    \noindent
+    As always, relevant code can be found on my GitHub page:\\
+
+    \centering{\href{https://github.com/qTipTip/FYS3150}{\githublogo \,
+    \color{gray!50}\textit{github.com/qTipTip}}}
 \end{abstract}
 \clearpage
 \doublespacing
@@ -333,7 +342,7 @@
     We need to chose the parameters $\sigma$ and $\varepsilon$ so that they are
     suited for simulation of argon. It turns out that $\sigma = 3.405
     \mathrm{\AA}$ and $\varepsilon = 119.8k_B\mathrm{K}$ with $k_B = 1$ in
-    MD-units.
+    MD-units are appropriate values for argon.
 
     Argon has a melting point of $\approx 84$K and a boiling point of $\approx
     87$K. If we run the simulations, once for a temperature of $80$K, once for
@@ -586,8 +595,7 @@ from approximately linear to a constant.
 We also considered the melting temperature of argon, and measured it to be
 somewhere close to $300K$, which does not really coincide with the
 experimentally observed melting temperature of approximately $84K$. Despite
-this disparity the system at least behaves consistent. 
-
+this disparity the system at least behaves consistently.
 
 \begin{thebibliography}{9}
 \bibitem{folding}
