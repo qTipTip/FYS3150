@@ -46,6 +46,7 @@
 
 \section{Introduction}
 \label{sec:introduction}
+
     Molecular dynamics (referred to as MD), deals with the time evolution of a
     system of particles, typically atoms or molecules. Being first explored in
     the late 1950's, it has had a wide range of applications, in fields as
@@ -54,27 +55,27 @@
     physics and more specifically proteins.  In 1975, Levitt and Warshel
     \cite{folding} simulated protein folding and in 1976 Cooper
     \cite{thermoprotein} presented results on thermodynamic fluctuations in
-    protein folding with methods comparable to todays standards.
+    protein folding with methods comparable to todays standards. More related
+    to our project are the results of A. Rahman in 1964 \cite{liquid_argon}
+    where he simulates liquid argon and find his simulations to more or less
+    agree with experiments. 
     
     In order to verify the molecular dynamics model one can for instance
     compare with physical experiments. For molecular systems one particular
     method is of special interest, namely nuclear magnetic resonance
-    spectroscopy.
-
-    Molecular Dynamics can take on many forms. Notable in the addition of what
-    we examine in this project, is the Monte-Carlo and Brownian dynamics
-    variants of MD. 
+    spectroscopy.  Molecular Dynamics can take on many forms. Notable in the
+    addition to what we examine in this project, is the Monte-Carlo and
+    Brownian dynamics variants of MD. 
      
-    It is based on the simple idea of considering a finite number of molecules
-    and letting them interact for a fixed amount of time, which gives us an
-    idea of how the system evolves. 
-
-    In this project we examine what goes into creating a working MD-program
-    that can compute various physical quantities and then proceed by
-    considering some specific systems where we look at, amongst other, the
-    kinetic energy, the initial temperature required in order to reach a
-    desired final temperature, and finding the diffusion constant for the
-    system in order to compute the melting temperature.
+    Molecular dynamics is based on the simple idea of considering a finite
+    number of molecules and letting them interact for a fixed amount of time,
+    which gives us an idea of how the system evolves.  In this project we
+    examine what goes into creating a working MD-program that can compute
+    various physical quantities and then proceed by considering some specific
+    systems where we look at, amongst other, the kinetic energy, the initial
+    temperature required in order to reach a desired final temperature, and
+    finding the diffusion constant for the system in order to compute the
+    melting temperature.
 
     The construction of the program will be covered in section
     \ref{sec:building_a_working_md_program}, where some of the motivation
@@ -566,16 +567,19 @@ devised in the previous section.
 \section{Conclusion}
 \label{sec:conclusion}
 
-
-
 \begin{thebibliography}{9}
 \bibitem{folding}
     Levitt, M., \& Warshel, A., `Computer simulation of protein folding`, Nature, Vol. 253, No. 5494. Available from: \url{http://csb.stanford.edu/levitt/Levitt_NAT75_folding.pdf}
 \bibitem{thermoprotein}
     Cooper, A. `Thermodynamic fluctuations in protein molecules`, Proceedings of the National Academy of Sciences of the United States of America, Vol. 73, No. 8. Available from: \url{http://www.pnas.org/content/73/8/2740.full.pdf}
+\bibitem{liquid_argon}
+    Rahman, A., `Correlations in the Motion of Atoms in Liquid Argon`, Physical Review, Volume 136, No. 2A. Available from: \url{http://journals.aps.org/pr/pdf/10.1103/PhysRev.136.A405}.
 \bibitem{min_image}
-    \url{https://en.wikipedia.org/wiki/Periodic_boundary_conditions#Practical_implementation:_continuity_and_the_minimum_image_convention}
-\bibitem{equipar} \url{https://en.wikipedia.org/wiki/Equipartition\_theorem}
-\bibitem{virial} \url{https://en.wikipedia.org/wiki/Virial_theorem}
+    `Periodic boundary conditions` (wiki article), December 7, 2015. Available from: \url{https://en.wikipedia.org/wiki/Periodic_boundary_conditions#Practical_implementation:_continuity_and_the_minimum_image_convention} [November 13, 2015]
+\bibitem{equipar} 
+    `Equipartition theorem` (wiki article), December 7, 2015.
+    Available from: \url{https://en.wikipedia.org/wiki/Equipartition\_theorem} [November 21, 2015]
+\bibitem{virial} 
+    `Virial theorem` (wiki article), December 7, 2015, \url{https://en.wikipedia.org/wiki/Virial_theorem} [October 7, 2015]
 \end{thebibliography}
 \end{document}
