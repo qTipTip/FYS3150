@@ -39,11 +39,12 @@
     properties. We also compute the melting temperature of argon, by means of
     the Einstein relation and diffusion constant.
 \end{abstract}
+\clearpage
 \doublespacing
 \tableofcontents
 \listoffigures      
 \singlespacing
-
+\clearpage
 \section{Introduction}
 \label{sec:introduction}
 
@@ -566,6 +567,27 @@ devised in the previous section.
 
 \section{Conclusion}
 \label{sec:conclusion}
+
+In this project we have mainly been concerned with the properties of argon. We
+have most notably looked at how a molecular dynamics simulation of argon using
+the Lennard-Jones potential behaves.  The results tells us that the
+experimental values for argon are not properly reflected in the simulations,
+however the system does more or less behave as it should, albeit for a larger
+temperature. When considering the force model we made some optimizations to the
+potential, and only looked at the interactions between atoms sufficiently close
+to each other. This lead to a significant increase in simulation speed, from a
+time complexity of $\mathcal{O}(N^2)$ to one of $\mathcal{O}(N)$.
+
+We also chose to implement the Velocity Verlet algorithm as our time
+integrator, in preference over the more basic Euler-Cromer method. This lead to
+a more stable energy conservation over varying time steps. The improvement was
+from approximately linear to a constant. 
+
+We also considered the melting temperature of argon, and measured it to be
+somewhere close to $300K$, which does not really coincide with the
+experimentally observed melting temperature of approximately $84K$. Despite
+this disparity the system at least behaves consistent. 
+
 
 \begin{thebibliography}{9}
 \bibitem{folding}
