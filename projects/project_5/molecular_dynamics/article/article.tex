@@ -6,6 +6,8 @@
 \usepackage[]{amsthm, amsmath, amssymb} 
 \usepackage[]{fancyhdr}
 \usepackage[]{setspace} 
+\usepackage[]{tikz} 
+\usetikzlibrary{shapes, arrows}
 \usepackage[]{hyperref} 
 \urlstyle{sf}
 \graphicspath{{../pictures/}}
@@ -51,8 +53,8 @@
 \clearpage
 \doublespacing
 \tableofcontents
-\listoffigures      
 \singlespacing
+\listoffigures      
 \clearpage
 \section{Introduction}
 \label{sec:introduction}
@@ -181,7 +183,6 @@
     interaction.  The distribution is directly dependent on the temperature of
     the system as well as the mass of each particle. We want to initialize each
     atom with a random velocity given by the Maxwell-Boltzmann distribution.
-
     Mathematically, the distribution function reads
     \begin{equation}
         \notag
@@ -466,6 +467,21 @@ method.}
     by the same amount, because then the relative distance between instantaneous
     position and initial position is equal to the true displacement.
 
+    \subsection{Program Flow}
+    \label{sub:program_flow}
+
+    A flow-chart describing the execution of the program can be seen in
+    figure \ref{fig:flowchart}. I only a few of the more vital processes are
+    described in detail.
+    \begin{figure}[h]
+        \centering \includegraphics[width=0.8\linewidth]{flow_chart.pdf}
+        \caption[Flow chart]{A flow-chart of the program execution. The method
+            \texttt{system.step} is described in more detail because it is what
+            constitutes most of the program and is therefore included as a
+        separate subprocess. The chart quite crude, and is meant to give an
+    overarching idea of how the program executes.}
+        \label{fig:flowchart}
+    \end{figure}
 \section{Simulations}
 \label{sec:simulations}
 
@@ -524,7 +540,7 @@ devised in the previous section.
     stabilization independent of the temperature. 
 
     \begin{figure}[h]
-        \centering \includegraphics[width=\linewidth]{temperature_ratio.pdf}
+        \centering \includegraphics[width=0.8\linewidth]{temperature_ratio.pdf}
         \caption[Temperature ratio]{Plotting the ratio between initial and
             instantaneous temperature for varying $T_i$. Each individual graph
             corresponds to one value of $T_i$ and the ratio is plotted against
@@ -563,8 +579,7 @@ devised in the previous section.
     $304K$.
     
     \begin{figure}[h]
-        \centering
-        \includegraphics[width=0.8\linewidth]{diffusion_constant.pdf}
+        \centering \includegraphics[width=0.8\linewidth]{diffusion_constant.pdf}
         \caption[Diffusion constant]{The diffusion constant as a function of
             temperature. We here see that $D$ abruptly increases at the
             temperature of $T = 304K$ which indicates that the crystal is
