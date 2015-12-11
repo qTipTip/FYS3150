@@ -405,7 +405,29 @@ method.}
     one. One way of looking at this is by examining the fluctuations in the
     total energy as functions of the time step $\Delta t$. This will be
     examined in section \ref{sub:energy_conservation_of_integration_method}.
+
+    \subsubsection{Derivation}
+    \label{ssub:derivation}
     
+    The Velocity Verlet algorithm can be derived using Taylor expansion and
+    this derivation follows closely that of \cite{velo-ver}. We start with
+    $\vec{r}(t + \Delta t)$ and write this as a Taylor expansion:
+    \begin{align*}
+        \vec{r}(t + \Delta t) &= \vec{r}(t) + \Delta t \dot{\vec{r}}(t) +
+        \frac{\Delta t^2}{2}\ddot{\vec{r}}(t) + \mathcal{O}(\Delta t^3).
+    \intertext{We can rewrite this using that $\dot{\vec{v}}(t) = \vec{F}(\vec{r}(t)) / m$
+    and that $\ddot{\vec{r}} = \vec{F}(\vec{r}(t)) / m$.}
+        \vec{r}(t + \Delta t) &= \vec{r}(t) + \Delta t \vec{v}(t) + \frac{\Delta t^2}{2} \frac{\vec{F}(\vec{r}(t))}{m}+ \mathcal{O}(\Delta t^3). \\ 
+    \intertext{We now look at $\vec{v}(t + \Delta t)$ and its Taylor expansion:}
+        \vec{v}(t + \Delta t) &= \vec{t} + \Delta t \dot{\vec{v}}(t) \frac{\Delta t^2}{2}\ddot{\vec{v}}(t) + \mathcal{O}(\Delta t^3). \\
+    \intertext{In order to simplify this, we need an expression for $\ddot{\vec{v}}$. So we look at the Taylor expansion for $\dot{\vec{v}}(t + \Delta t)$:}
+        \dot{\vec{v}}(t + \Delta t) &= \dot{\vec{v}}(t) + \Delta t
+        \ddot{\vec{v}}(t) + \mathcal{O}(\Delta t^2). \\
+    \intertext{This equation can be solved for $\Delta t^2 \ddot{\vec{v}} / 2$ and when plugged into the equation above yields}
+        \vec{v}(t + \Delta t) &= \vec{v}(t) + \Delta t  \dot{\vec{v}}(t) + \frac{\Delta t}{2}\left( \dot{\vec{v}}(t + \Delta t) - \dot{\vec{v}}(t)\right) + \mathcal{O}(\Delta t^3).\\
+    \intertext{One final rewrite, using the standard equations of motion gives}
+    \vec{v}(t + \Delta t) &= \vec{v}(t) + \frac{\Delta t}{2m} \left( \vec{F}(\vec{r}(t + \Delta t)) + \vec{F}(\vec{r}(t))\right) + \mathcal{O}(\Delta t)^3.
+    \end{align*}
     \subsection{Sampling quantities}
     \label{sub:sampling_quantities}
    
@@ -623,6 +645,9 @@ this disparity the system at least behaves consistently.
     Periodic boundary conditions. (2015, November 13). Retrieved December 7, 2015, from \url{https://en.wikipedia.org/wiki/Periodic_boundary_conditions}
 \bibitem{liquid_argon}
     Rahman, A. (1964). Correlations in the Motion of Atoms in Liquid Argon. Phys. Rev. Physical Review, 126(2A). Retrieved December 7, 2015, from \url{http://journals.aps.org/pr/pdf/10.1103/PhysRev.136.A405}
+\bibitem{velo-ver}
+    J'onsson, H. (n.d.). Classical Dynamics. Retrieved December 11, 2015, from
+    \url{https://notendur.hi.is//~hj/EE4/Verlet.pdf}
 \bibitem{virial} 
     Virial Theorem. (2015, October 7). Retrieved December 7, 2015, from \url{https://en.wikipedia.org/wiki/Virial_theorem}
 \end{thebibliography}
