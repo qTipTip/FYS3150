@@ -44,3 +44,7 @@ quadrature and Monte Carlo-integration.
 
 We look at the Ising model for magnetic systems with no external magnetic field. The metropolis algorithm is well suited for this kind of statistical analysis, and will be used in this project. We first derive some analytical results specific to the 2x2-case and compare these to our numerical computations. The code is parallellized using OpenMPI which lets you run the code on several clusters.
 
+#### Project 5
+
+We simulate argon using face centered cubic lattice, the Lennard-Jones potential and the Velocity Verlet time integrator.
+The melting temperature of argon is measured to be somewhere around 300K. We also look at the energy conservation of Velocity Verlet and how it compares to the Euler-Cromer algorithm. 
