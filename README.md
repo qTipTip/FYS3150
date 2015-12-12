@@ -14,9 +14,6 @@ instructions on how to be ran.
 The course has five mandatory projects where it is required to upload the
 associated report as well as source code.
 
-Every week there are a set of weekly exercises, that I will try to finish and
-I'll upload the code writted or related material here.
-
 ### List of Projects
 
 #### Project 1
